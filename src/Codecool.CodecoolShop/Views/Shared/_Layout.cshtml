@@ -27,13 +27,17 @@
                             </a>
 
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                                <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="Index" asp-route-index="1">Tablets</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="Index" asp-route-index="2">Laptops</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="Index" asp-route-index="3">Phones</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="Index" asp-route-index="4">Tvs</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="Index" asp-route-index="5">Refrigerators</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="Index" asp-route-index="6">Washing Machines</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="Index" asp-route-index="7">Stoves</a>
+                                @foreach (var element in @ViewBag.Categories)
+                                {
+                                    <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="IndexByCategory" asp-route-categoryIndex="@element.Id">@(element.Name)s</a>
+                                }
+                                @*<a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="IndexByCategory" asp-route-categoryIndex="1">Tablets</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="IndexByCategory" asp-route-categoryIndex="2">Laptops</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="IndexByCategory" asp-route-categoryIndex="3">Phones</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="IndexByCategory" asp-route-categoryIndex="4">Tvs</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="IndexByCategory" asp-route-categoryIndex="5">Refrigerators</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="IndexByCategory" asp-route-categoryIndex="6">Washing Machines</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="IndexByCategory" asp-route-categoryIndex="7">Stoves</a>*@
                             </div>
                         </li>
 

@@ -22,14 +22,41 @@ namespace Codecool.CodecoolShop.Controllers
             _logger = logger;
             ProductService = new ProductService(
                 ProductDaoMemory.GetInstance(),
-                ProductCategoryDaoMemory.GetInstance());
+                ProductCategoryDaoMemory.GetInstance(),
+                SupplierDaoMemory.GetInstance());
         }
 
-        public IActionResult Index(int index = 1)
+        //public IActionResult Index()
+        //{
+        //    var products= ProductService.GetAllProducts();
+        //    return View(products.ToList());
+        //}
+        public IActionResult Index()
         {
-            var products = ProductService.GetProductsForCategory(index);
-            return View(products.ToList());
+            var products = ProductService.GetAllProducts();
+            ViewBag.Title = "Home Page";
+            ViewBag.Products = products.ToList();
+            ViewBag.Categories = ProductService.GetAllCategories().ToList();
+            ViewBag.Suppliers = ProductService.GetAllSuppliers().ToList();
+            return View(products);
         }
+        public IActionResult IndexByCategory(int categoryIndex)
+            {
+                var productsByCategory = ProductService.GetProductsForCategory(categoryIndex);
+                return View("Index", productsByCategory.ToList());
+            }        
+        public IActionResult IndexBySupplier(int suplierIndex)
+        {
+            var productsBySupplier = ProductService.GetProductsForSupplier(suplierIndex);
+            return View("Index", productsBySupplier.ToList());
+        }
+
+        //public ViewResult Index(int a)
+        //{
+        //    ViewBag.Categories = ProductService.GetAllCategories().ToList();
+        //    ViewBag.Suppliers = ProductService.GetAllSuppliers().ToList();
+        //    return View();
+        //}
 
         public IActionResult Privacy()
         {
