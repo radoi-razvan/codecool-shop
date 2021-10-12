@@ -65,6 +65,7 @@ namespace Codecool.CodecoolShop
             IProductCategoryDao productCategoryDataStore = ProductCategoryDaoMemory.GetInstance();
             ISupplierDao supplierDataStore = SupplierDaoMemory.GetInstance();
 
+            // Generate supplieres
             Supplier amazon = new Supplier{Name = "Amazon", Description = "Digital content and services"};
             supplierDataStore.Add(amazon);
             Supplier lenovo = new Supplier{Name = "Lenovo", Description = "Computers"};
@@ -90,6 +91,7 @@ namespace Codecool.CodecoolShop
             Supplier moratti = new Supplier { Name = "Moratti", Description = "Stoves" };
             supplierDataStore.Add(moratti);
 
+            // Generate product category & products
             ProductCategory tablet = new ProductCategory {Name = "Tablet", Department = "Hardware", Description = "A tablet computer, commonly shortened to tablet, is a thin, flat mobile computer with a touchscreen display." };
             productCategoryDataStore.Add(tablet);
             productDataStore.Add(new Product { Name = "Amazon Fire", DefaultPrice = 49.9m, Currency = "USD", Description = "Fantastic price. Large content ecosystem. Good parental controls. Helpful technical support", ProductCategory = tablet, Supplier = amazon });
