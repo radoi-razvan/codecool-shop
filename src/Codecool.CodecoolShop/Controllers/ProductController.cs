@@ -46,9 +46,9 @@ namespace Codecool.CodecoolShop.Controllers
                 ViewBag.Suppliers = ProductService.GetAllSuppliers().ToList();
                 return View("Index");
             }        
-        public IActionResult IndexBySupplier(int suplierIndex)
+        public IActionResult IndexBySupplier(int supplierIndex)
         {
-            ViewBag.Products = ProductService.GetProductsForSupplier(suplierIndex).ToList();
+            ViewBag.Products = ProductService.GetProductsForSupplier(supplierIndex).ToList();
             ViewBag.Categories = ProductService.GetAllCategories().ToList();
             ViewBag.Suppliers = ProductService.GetAllSuppliers().ToList();
             return View("Index");
