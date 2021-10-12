@@ -56,6 +56,8 @@ namespace Codecool.CodecoolShop.Controllers
 
         public IActionResult Privacy()
         {
+            ViewBag.Categories = ProductService.GetAllCategories().ToList();
+            ViewBag.Suppliers = ProductService.GetAllSuppliers().ToList();
             return View();
         }
 
