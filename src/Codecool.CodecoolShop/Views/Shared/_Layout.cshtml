@@ -23,7 +23,7 @@
                         </li>
                         <li class="nav-item dropdown show">
                             <a class="dropdown-toggle" href="#" style="text-decoration: none; color: black;" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                Products
+                                Categories
                             </a>
 
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
@@ -31,13 +31,18 @@
                                 {
                                     <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="IndexByCategory" asp-route-categoryIndex="@element.Id">@(element.Name)s</a>
                                 }
-                                @*<a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="IndexByCategory" asp-route-categoryIndex="1">Tablets</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="IndexByCategory" asp-route-categoryIndex="2">Laptops</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="IndexByCategory" asp-route-categoryIndex="3">Phones</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="IndexByCategory" asp-route-categoryIndex="4">Tvs</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="IndexByCategory" asp-route-categoryIndex="5">Refrigerators</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="IndexByCategory" asp-route-categoryIndex="6">Washing Machines</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="IndexByCategory" asp-route-categoryIndex="7">Stoves</a>*@
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown show">
+                            <a class="dropdown-toggle" href="#" style="text-decoration: none; color: black;" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Suppliers
+                            </a>
+
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                @foreach (var element in @ViewBag.Suppliers)
+                                {
+                                    <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="IndexBySupplier" asp-route-supplierIndex="@element.Id">@(element.Name)</a>
+                                }
                             </div>
                         </li>
 

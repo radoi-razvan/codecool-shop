@@ -33,30 +33,26 @@ namespace Codecool.CodecoolShop.Controllers
         //}
         public IActionResult Index()
         {
-            var products = ProductService.GetAllProducts();
             ViewBag.Title = "Home Page";
-            ViewBag.Products = products.ToList();
+            ViewBag.Products = ProductService.GetAllProducts().ToList();
             ViewBag.Categories = ProductService.GetAllCategories().ToList();
             ViewBag.Suppliers = ProductService.GetAllSuppliers().ToList();
-            return View(products);
+            return View();
         }
         public IActionResult IndexByCategory(int categoryIndex)
             {
-                var productsByCategory = ProductService.GetProductsForCategory(categoryIndex);
-                return View("Index", productsByCategory.ToList());
+                ViewBag.Products= ProductService.GetProductsForCategory(categoryIndex).ToList();
+                ViewBag.Categories = ProductService.GetAllCategories().ToList();
+                ViewBag.Suppliers = ProductService.GetAllSuppliers().ToList();
+                return View("Index");
             }        
         public IActionResult IndexBySupplier(int suplierIndex)
         {
-            var productsBySupplier = ProductService.GetProductsForSupplier(suplierIndex);
-            return View("Index", productsBySupplier.ToList());
+            ViewBag.Products = ProductService.GetProductsForSupplier(suplierIndex).ToList();
+            ViewBag.Categories = ProductService.GetAllCategories().ToList();
+            ViewBag.Suppliers = ProductService.GetAllSuppliers().ToList();
+            return View("Index");
         }
-
-        //public ViewResult Index(int a)
-        //{
-        //    ViewBag.Categories = ProductService.GetAllCategories().ToList();
-        //    ViewBag.Suppliers = ProductService.GetAllSuppliers().ToList();
-        //    return View();
-        //}
 
         public IActionResult Privacy()
         {
