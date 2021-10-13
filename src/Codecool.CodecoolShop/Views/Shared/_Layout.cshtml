@@ -50,8 +50,8 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Privacy"><span style="color: white;">Privacy</span></a>
                         </li>
-                        <li class="nav-item nav-right" style="margin: auto; margin-right:0;">
-                            <a class="nav-link" asp-area="" asp-controller="Product" asp-action="Privacy"><i class="bi bi-cart" style="color: white;"></i> <span style="color: white;">My Cart</span></a>
+                        <li class="nav-item nav-right" style="margin: auto; margin-right:0; cursor: pointer;">
+                            <a class="nav-link" id="cartBtn"><i class="bi bi-cart" style="color: white;"></i> <span style="color: white;">My Cart</span></a>
                         </li>
                     </ul>
                 </div>
@@ -59,6 +59,62 @@
         </nav>
     </header>
     <div class="container">
+        @*Cart HTML*@
+        <div id="container-cart">
+            <div class="CartContainer-cart">
+                <div class="Header-cart">
+                    <h3 class="Heading-cart">Shopping Cart</h3>
+                    <i class="bi bi-cart-x Action-cart"></i>
+                </div>
+
+                <div class="Cart-Items-cart">
+                    <div class="image-box-cart">
+                        <img src="img/Amazon Fire.jpg" class="cart-img" />
+                    </div>
+                    <div class="about-cart">
+                        <h1 class="title-cart">Apple Juice</h1>
+                    </div>
+                    <div class="counter-cart">
+                        <div class="btn-cart">+</div>
+                        <div class="count-cart">2</div>
+                        <div class="btn-cart">-</div>
+                    </div>
+                    <div class="prices-cart">
+                        <div class="amount-cart">$2.99</div>
+                        <div class="remove-cart"><i class="bi bi-x"></i></div>
+                    </div>
+                </div>
+
+                <div class="Cart-Items-cart pad-cart">
+                    <div class="image-box-cart">
+                        <img src="img/Amazon Fire.jpg" class="cart-img" />
+                    </div>
+                    <div class="about-cart">
+                        <h1 class="title-cart">4-burner cooking stove, gas, 900x900x850 mm Moratti</h1>
+                    </div>
+                    <div class="counter-cart">
+                        <div class="btn-cart">+</div>
+                        <div class="count-cart">1</div>
+                        <div class="btn-cart">-</div>
+                    </div>
+                    <div class="prices-cart">
+                        <div class="amount-cart">$3.19</div>
+                        <div class="remove-cart"><i class="bi bi-x"></i></div>
+                    </div>
+                </div>
+                <hr>
+                <div class="checkout-cart">
+                    <div class="total-cart">
+                        <div>
+                            <div class="Subtotal-cart">Sub-Total</div>
+                            <div class="items-cart">2 items</div>
+                        </div>
+                        <div class="total-amount-cart">$6.18</div>
+                    </div>
+                    <button class="button-cart">Checkout</button>
+                </div>
+            </div>
+        </div>
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
