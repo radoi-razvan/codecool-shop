@@ -26,6 +26,10 @@ namespace Codecool.CodecoolShop
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Session configuration
+            services.AddSession();
+            services.AddMemoryCache();
+
             services.AddControllersWithViews();
         }
 
@@ -45,9 +49,13 @@ namespace Codecool.CodecoolShop
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            // Session configuration
+            app.UseSession();
+
             app.UseRouting();
 
             app.UseAuthorization();
+
 
             app.UseEndpoints(endpoints =>
             {

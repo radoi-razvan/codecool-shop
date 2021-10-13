@@ -26,38 +26,36 @@ namespace Codecool.CodecoolShop.Controllers
                 SupplierDaoMemory.GetInstance());
         }
 
-        //public IActionResult Index()
-        //{
-        //    var products= ProductService.GetAllProducts();
-        //    return View(products.ToList());
-        //}
-        public IActionResult Index()
+        private void GetCategoriesAndSuppliers()
         {
-            ViewBag.Title = "Home Page";
-            ViewBag.Products = ProductService.GetAllProducts().ToList();
             ViewBag.Categories = ProductService.GetAllCategories().ToList();
             ViewBag.Suppliers = ProductService.GetAllSuppliers().ToList();
-            return View();
+        }
+
+        public IActionResult Index()
+        {
+            // var session = HttpContext.Session;
+            // Session["myKey"]   
+            var products = ProductService.GetAllProducts().ToList();
+            GetCategoriesAndSuppliers();
+            return View(products);
         }
         public IActionResult IndexByCategory(int categoryIndex)
             {
-                ViewBag.Products= ProductService.GetProductsForCategory(categoryIndex).ToList();
-                ViewBag.Categories = ProductService.GetAllCategories().ToList();
-                ViewBag.Suppliers = ProductService.GetAllSuppliers().ToList();
-                return View("Index");
+                var products = ProductService.GetProductsForCategory(categoryIndex).ToList();
+                GetCategoriesAndSuppliers();
+                return View("Index", products);
             }        
         public IActionResult IndexBySupplier(int supplierIndex)
         {
-            ViewBag.Products = ProductService.GetProductsForSupplier(supplierIndex).ToList();
-            ViewBag.Categories = ProductService.GetAllCategories().ToList();
-            ViewBag.Suppliers = ProductService.GetAllSuppliers().ToList();
-            return View("Index");
+            var products = ProductService.GetProductsForSupplier(supplierIndex).ToList();
+            GetCategoriesAndSuppliers();
+            return View("Index", products);
         }
 
         public IActionResult Privacy()
         {
-            ViewBag.Categories = ProductService.GetAllCategories().ToList();
-            ViewBag.Suppliers = ProductService.GetAllSuppliers().ToList();
+            GetCategoriesAndSuppliers();
             return View();
         }
 
