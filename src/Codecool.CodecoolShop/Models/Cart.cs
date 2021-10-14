@@ -8,37 +8,42 @@ namespace Codecool.CodecoolShop.Models
     public class Cart
     {
         public Dictionary<Product, int> Products { get; set; } = new Dictionary<Product, int>();
-        public bool Add(Product product)
+        public void Add(Product product)
         {
             if (Products.Count >= 1)
             {
+                bool productFound = false;
                 foreach (Product key in Products.Keys)
                 {
                     if (key.Id == product.Id)
                     {
                         Products[key] += 1;
-                        break;
-                    }
-                    else
-                    {
-                        Products[product] = 1;
-                        break;
+                        productFound = true;
                     }
                 }
+                if (!productFound)
+                    Products[product] = 1;
             }
             else
             {
                 Products[product] = 1;
             }
-
-
-            return true;
         }
-        public void Edit(Product product, bool increase)
+        public void Delete(int productId)
         {
-            if (Products.ContainsKey(product))
+            foreach (var key in Products.Keys)
             {
-                Products[product] = increase ? Products[product] + 1 : Products[product] - 1;
+                if (key.Id == productId)
+                {
+                    if (Products[key] < 1)
+                    {
+                        Remove(Products[key]);
+                    }
+                    else
+                    {
+                        Products[key] -= 1;
+                    }
+                }
             }
         }
         public void Remove(Product product)
@@ -47,10 +52,20 @@ namespace Codecool.CodecoolShop.Models
                 Products.Remove(product);
         }
 
+        public void Remove(int productId)
+        {
+            foreach (var key in Products.Keys)
+            {
+                if (key.Id == productId)
+                {
+                    Products.Remove(key);
+                }
+            }
+        }
+
         public void Clear()
         {
             Products.Clear();
         }
     }
 }
-
