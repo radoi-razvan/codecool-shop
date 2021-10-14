@@ -31,7 +31,8 @@ namespace Codecool.CodecoolShop.Controllers
             ViewBag.Categories = ProductService.GetAllCategories().ToList();
             ViewBag.Suppliers = ProductService.GetAllSuppliers().ToList();
             ViewBag.ShoppingCart = ProductService.GetCart().Products;
-            ViewBag.ShoppingCartTotal = ProductService.GetCart().Products.Keys.Sum(p => p.DefaultPrice);
+            ViewBag.ShoppingCartTotal = GetCartTotalPrice(ViewBag.ShoppingCart);
+            ViewBag.ItemsNumber = ProductService.GetCart().Products.Values.Sum();
         }
 
         public IActionResult Index()
@@ -41,6 +42,13 @@ namespace Codecool.CodecoolShop.Controllers
             GetViewData();
             return View(products);
         }
+
+        public IActionResult Checkout()
+        {
+            GetViewData();
+            return View("Checkout");
+        }
+
         public IActionResult IndexByCategory(int categoryIndex)
         {
             var products = ProductService.GetProductsForCategory(categoryIndex).ToList();
@@ -92,7 +100,18 @@ namespace Codecool.CodecoolShop.Controllers
 
         public IActionResult Privacy()
         {
+            GetViewData();
             return View();
+        }
+
+        public decimal GetCartTotalPrice(Dictionary<Product,int> cart)
+        {
+            decimal result = 0;
+            foreach(var kv in cart)
+            {
+                result += kv.Key.DefaultPrice * kv.Value;
+            }
+            return result;
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
