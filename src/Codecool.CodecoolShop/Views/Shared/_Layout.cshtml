@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
 </head>
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor httpContextAccessor
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
@@ -66,50 +68,34 @@
                     <h3 class="Heading-cart">Shopping Cart</h3>
                     <i class="bi bi-cart-x Action-cart"></i>
                 </div>
-
-                <div class="Cart-Items-cart">
-                    <div class="image-box-cart">
-                        <img src="https://localhost:44368/img/Amazon Fire.jpg" class="cart-img" />
+                @foreach (KeyValuePair<Product,int> keyValuePair in @ViewBag.ShoppingCart)
+                {
+                    <div class="Cart-Items-cart">
+                        <div class="image-box-cart">
+                            <img src="https://localhost:44368/img/@(keyValuePair.Key.Name).jpg" class="cart-img" />
+                        </div>
+                        <div class="about-cart">
+                            <h1 class="title-cart">@keyValuePair.Key.Name</h1>
+                        </div>
+                        <div class="counter-cart">
+                            <div class="btn-cart">+</div>
+                            <div class="count-cart">@keyValuePair.Value</div>
+                            <div class="btn-cart">-</div>
+                        </div>
+                        <div class="prices-cart">
+                            <div class="amount-cart">$@(keyValuePair.Key.DefaultPrice)</div>
+                            <div class="remove-cart"><i class="bi bi-x"></i></div>
+                        </div>
                     </div>
-                    <div class="about-cart">
-                        <h1 class="title-cart">Apple Juice</h1>
-                    </div>
-                    <div class="counter-cart">
-                        <div class="btn-cart">+</div>
-                        <div class="count-cart">2</div>
-                        <div class="btn-cart">-</div>
-                    </div>
-                    <div class="prices-cart">
-                        <div class="amount-cart">$2.99</div>
-                        <div class="remove-cart"><i class="bi bi-x"></i></div>
-                    </div>
-                </div>
-
-                <div class="Cart-Items-cart pad-cart">
-                    <div class="image-box-cart">
-                        <img src="https://localhost:44368/img/Amazon Fire.jpg" class="cart-img" />
-                    </div>
-                    <div class="about-cart">
-                        <h1 class="title-cart">4-burner cooking stove, gas, 900x900x850 mm Moratti</h1>
-                    </div>
-                    <div class="counter-cart">
-                        <div class="btn-cart">+</div>
-                        <div class="count-cart">1</div>
-                        <div class="btn-cart">-</div>
-                    </div>
-                    <div class="prices-cart">
-                        <div class="amount-cart">$3.19</div>
-                        <div class="remove-cart"><i class="bi bi-x"></i></div>
-                    </div>
-                </div>
+                }
                 <hr>
                 <div class="checkout-cart">
                     <div class="total-cart">
                         <div>
                             <div class="Subtotal-cart">Sub-Total</div>
-                            <div class="items-cart">2 items</div>
+                            <div class="items-cart">@ViewBag.ShoppingCart.Count</div>
                         </div>
-                        <div class="total-amount-cart">$6.18</div>
+                        <div class="total-amount-cart">$@(ViewBag.ShoppingCartTotal)</div>
                     </div>
                     <button class="button-cart">Checkout</button>
                 </div>
@@ -123,7 +109,7 @@
     <footer class="border-top footer text-muted">
         <div class="container" style="color: white;">
             &copy; 2021 - <span style="font-family: Jokerman; color: orangered;">CodecoolShop</span> - <a style="color: white;" asp-area="" asp-controller="Product" asp-action="Privacy">Privacy</a>
-</div>
+        </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
