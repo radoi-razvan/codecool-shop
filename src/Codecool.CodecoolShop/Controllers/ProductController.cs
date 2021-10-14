@@ -64,6 +64,31 @@ namespace Codecool.CodecoolShop.Controllers
             
             return View("\\Views\\Product\\Index.cshtml", products);
         }
+        public IActionResult RemoveFromCart(int productId)
+        {
+            var products = HttpContext.Session.GetObject<List<Product>>("ProductList");
+            ProductService.GetCart().Remove(productId);
+            GetViewData();
+
+            return View("\\Views\\Product\\Index.cshtml", products);
+        }
+        public IActionResult DeleteFromCart(int productId)
+        {
+            var products = HttpContext.Session.GetObject<List<Product>>("ProductList");
+            ProductService.GetCart().Delete(productId);
+            GetViewData();
+
+            return View("\\Views\\Product\\Index.cshtml", products);
+        }
+
+        public IActionResult ClearCart()
+        {
+            var products = HttpContext.Session.GetObject<List<Product>>("ProductList");
+            ProductService.GetCart().Clear();
+            GetViewData();
+
+            return View("\\Views\\Product\\Index.cshtml", products);
+        }
 
         public IActionResult Privacy()
         {
