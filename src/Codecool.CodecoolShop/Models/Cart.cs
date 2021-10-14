@@ -35,21 +35,13 @@ namespace Codecool.CodecoolShop.Models
             {
                 if (key.Id == productId)
                 {
+                    Products[key] -= 1;
                     if (Products[key] < 1)
                     {
-                        Remove(Products[key]);
-                    }
-                    else
-                    {
-                        Products[key] -= 1;
+                        Products.Remove(key);
                     }
                 }
             }
-        }
-        public void Remove(Product product)
-        {
-            if (Products.ContainsKey(product))
-                Products.Remove(product);
         }
 
         public void Remove(int productId)
