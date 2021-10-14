@@ -5,11 +5,6 @@ for details on configuring this project to bundle and minify static web assets. 
     background-color: black;
 }
 
-.nav-item :hover {
-    background-color: orangered;
-    border-radius: 100%;
-}
-
 .dropdown {
     display: flex;
     justify-content: center;
@@ -145,7 +140,7 @@ body {
 }
 
 .Heading-cart {
-    font-size: 20px;
+    font-size: 15px;
     font-family: 'Open Sans';
     font-weight: 700;
     color: #2F3841;
@@ -280,7 +275,7 @@ hr {
 }
 
 .checkout-cart {
-    float: right;
+    /*float: right;*/ 
     margin-right: 5%;
     margin-bottom: 10px;
 }
@@ -297,6 +292,8 @@ hr {
     font-family: 'Open Sans';
     font-weight: 700;
     color: #202020;
+    float: left;
+    margin-left: 10px;
 }
 
 .items-cart {
