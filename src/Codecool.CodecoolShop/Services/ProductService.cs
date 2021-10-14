@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Codecool.CodecoolShop.Daos;
+using Codecool.CodecoolShop.Daos.Implementations;
 using Codecool.CodecoolShop.Models;
 
 namespace Codecool.CodecoolShop.Services
@@ -9,13 +10,18 @@ namespace Codecool.CodecoolShop.Services
         private readonly IProductDao productDao;
         private readonly IProductCategoryDao productCategoryDao;
         private readonly ISupplierDao supplierDao;
+        private readonly CartDaoMemory cartDao;
 
-        public ProductService(IProductDao productDao, IProductCategoryDao productCategoryDao, ISupplierDao supplierDao)
+        public ProductService(IProductDao productDao, IProductCategoryDao productCategoryDao, ISupplierDao supplierDao, CartDaoMemory cartDao)
         {
             this.productDao = productDao;
             this.productCategoryDao = productCategoryDao;
             this.supplierDao = supplierDao;
+            this.cartDao = cartDao;
         }
+
+        public Cart GetCart() => cartDao.cart;
+
         public ProductCategory GetProductCategory(int categoryId)
         {
             return this.productCategoryDao.Get(categoryId);
