@@ -66,7 +66,7 @@
             <div class="CartContainer-cart">
                 <div class="Header-cart">
                     <h3 class="Heading-cart">Shopping Cart</h3>
-                    <i class="bi bi-cart-x Action-cart"></i>
+                    <i class="bi bi-cart-x Action-cart"><a asp-area="" asp-controller="Product" asp-action="ClearCart"></a></i>
                 </div>
                 @foreach (KeyValuePair<Product,int> keyValuePair in @ViewBag.ShoppingCart)
                 {
@@ -78,13 +78,23 @@
                             <h1 class="title-cart">@keyValuePair.Key.Name</h1>
                         </div>
                         <div class="counter-cart">
-                            <div class="btn-cart">+</div>
+                            <div class="btn-cart">
+                                <a asp-area="" asp-controller="Product" asp-action="AddToCart" asp-route-productId="@keyValuePair.Key.Id">
+                                    +
+                                </a>
+                            </div>
                             <div class="count-cart">@keyValuePair.Value</div>
-                            <div class="btn-cart">-</div>
+                            <div class="btn-cart">
+                                <a asp-area="" asp-controller="Product" asp-action="DeleteFromCart" asp-route-productId="@keyValuePair.Key.Id">
+                                    -
+                                </a>
+                            </div>
                         </div>
                         <div class="prices-cart">
                             <div class="amount-cart">$@(keyValuePair.Key.DefaultPrice)</div>
-                            <div class="remove-cart"><i class="bi bi-x"></i></div>
+                            <div class="remove-cart"><i class="bi bi-x">
+                                 <a asp-area="" asp-controller="Product" asp-action="RemoveFromCart" asp-route-productId="@keyValuePair.Key.Id"></a>
+                            </i></div>
                         </div>
                     </div>
                 }
