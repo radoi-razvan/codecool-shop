@@ -18,7 +18,7 @@
                     <p class="card-text">Category: @element.ProductCategory.Department</p>
                     <p class="card-text">Supplier: @element.Supplier.Name</p>
                     <p class="card-text text-center"><strong>Price: @element.DefaultPrice.ToString("C2")</strong></p>
-                    <a href="" type="button" class="btn btn-primary" style="float: bottom">
+                    <a type="button" class="btn btn-primary" style="float: bottom" asp-area="" asp-controller="Cart" asp-action="AddToCart" asp-route-productId=@element.Id>
                         <i class="bi bi-cart-plus"></i> Add To Cart
                     </a>
                 </div>
