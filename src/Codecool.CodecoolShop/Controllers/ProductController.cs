@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Web;
-using System.Threading.Tasks;
-using Codecool.CodecoolShop.Daos;
+using System.Collections.Generic;
 using Codecool.CodecoolShop.Daos.Implementations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -26,40 +22,51 @@ namespace Codecool.CodecoolShop.Controllers
             ProductService = new ProductService(
                 ProductDaoMemory.GetInstance(),
                 ProductCategoryDaoMemory.GetInstance(),
-                SupplierDaoMemory.GetInstance());
+                SupplierDaoMemory.GetInstance(),
+                CartDaoMemory.GetInstance());
         }
 
-        private void GetCategoriesAndSuppliers()
+        private void GetViewData()
         {
             ViewBag.Categories = ProductService.GetAllCategories().ToList();
             ViewBag.Suppliers = ProductService.GetAllSuppliers().ToList();
+            ViewBag.ShoppingCart = ProductService.GetCart().Products;
+            ViewBag.ShoppingCartTotal = ProductService.GetCart().Products.Keys.Sum(p => p.DefaultPrice);
         }
 
         public IActionResult Index()
         {
             var products = ProductService.GetAllProducts().ToList();
-            HttpContext.Session.Set<List<Product>>("ProductList", products);
-            GetCategoriesAndSuppliers();
+            HttpContext.Session.Set("ProductList", products);
+            GetViewData();
             return View(products);
         }
         public IActionResult IndexByCategory(int categoryIndex)
         {
             var products = ProductService.GetProductsForCategory(categoryIndex).ToList();
-            HttpContext.Session.Set<List<Product>>("ProductList", products);
-            GetCategoriesAndSuppliers();
+            HttpContext.Session.Set("ProductList", products);
+            GetViewData();
             return View("Index", products);
         }        
         public IActionResult IndexBySupplier(int supplierIndex)
         {
             var products = ProductService.GetProductsForSupplier(supplierIndex).ToList();
-            HttpContext.Session.Set<List<Product>>("ProductList", products);
-            GetCategoriesAndSuppliers();
+            HttpContext.Session.Set("ProductList", products);
+            GetViewData();
             return View("Index", products);
+        }
+
+        public IActionResult AddToCart(int productId)
+        {
+            var products = HttpContext.Session.GetObject<List<Product>>("ProductList");
+            ProductService.GetCart().Add(products[productId - 1]);
+            GetViewData();
+            
+            return View("\\Views\\Product\\Index.cshtml", products);
         }
 
         public IActionResult Privacy()
         {
-            GetCategoriesAndSuppliers();
             return View();
         }
 
