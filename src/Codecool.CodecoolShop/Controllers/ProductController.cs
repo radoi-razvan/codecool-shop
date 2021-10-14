@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Web;
 using System.Threading.Tasks;
 using Codecool.CodecoolShop.Daos;
 using Codecool.CodecoolShop.Daos.Implementations;
@@ -9,6 +10,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Codecool.CodecoolShop.Models;
 using Codecool.CodecoolShop.Services;
+using Microsoft.AspNetCore.Http;
+using Codecool.CodecoolShop.Utils;
 
 namespace Codecool.CodecoolShop.Controllers
 {
@@ -34,21 +37,22 @@ namespace Codecool.CodecoolShop.Controllers
 
         public IActionResult Index()
         {
-            // var session = HttpContext.Session;
-            // Session["myKey"]   
             var products = ProductService.GetAllProducts().ToList();
+            HttpContext.Session.Set<List<Product>>("ProductList", products);
             GetCategoriesAndSuppliers();
             return View(products);
         }
         public IActionResult IndexByCategory(int categoryIndex)
-            {
-                var products = ProductService.GetProductsForCategory(categoryIndex).ToList();
-                GetCategoriesAndSuppliers();
-                return View("Index", products);
-            }        
+        {
+            var products = ProductService.GetProductsForCategory(categoryIndex).ToList();
+            HttpContext.Session.Set<List<Product>>("ProductList", products);
+            GetCategoriesAndSuppliers();
+            return View("Index", products);
+        }        
         public IActionResult IndexBySupplier(int supplierIndex)
         {
             var products = ProductService.GetProductsForSupplier(supplierIndex).ToList();
+            HttpContext.Session.Set<List<Product>>("ProductList", products);
             GetCategoriesAndSuppliers();
             return View("Index", products);
         }
