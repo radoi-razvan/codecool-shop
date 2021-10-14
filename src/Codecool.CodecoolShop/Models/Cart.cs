@@ -10,7 +10,28 @@ namespace Codecool.CodecoolShop.Models
         public Dictionary<Product, int> Products { get; set; } = new Dictionary<Product, int>();
         public bool Add(Product product)
         {
-            Products[product] = Products.ContainsKey(product) ? Products[product] + 1 : 1;
+            if (Products.Count >= 1)
+            {
+                foreach (Product key in Products.Keys)
+                {
+                    if (key.Id == product.Id)
+                    {
+                        Products[key] += 1;
+                        break;
+                    }
+                    else
+                    {
+                        Products[product] = 1;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                Products[product] = 1;
+            }
+
+
             return true;
         }
         public void Edit(Product product, bool increase)
