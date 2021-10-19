@@ -49,6 +49,12 @@ namespace Codecool.CodecoolShop.Controllers
             return View("Checkout");
         }
 
+        public IActionResult Payment()
+        {
+            GetViewData();
+            return View("Payment");
+        }
+
         public IActionResult IndexByCategory(int categoryIndex)
         {
             var products = ProductService.GetProductsForCategory(categoryIndex).ToList();
