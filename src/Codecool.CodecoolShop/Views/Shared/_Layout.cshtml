@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Codecool.CodecoolShop</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"/>
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
 </head>
@@ -12,7 +12,7 @@
 @inject IHttpContextAccessor httpContextAccessor
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3 fixed-top">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-controller="Product" asp-action="Index"><span style="font-weight: bold;" class="text-warning">CodecoolShop</span></a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -53,66 +53,70 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Privacy"><span style="color: white;">Privacy</span></a>
                         </li>
                         <li class="nav-item nav-right" style="margin: auto; margin-right:0; cursor: pointer;">
-                            <a class="nav-link" id="cartBtn"><i class="bi bi-cart" style="color: white;"></i> <span style="color: white;">My Cart <span class="badge bg-warning">@(ViewBag.ItemsNumber)</span></span></a>
+                            <a class="btn nav-link" id="cartBtn" data-bs-toggle="offcanvas" href="#offcanvasCart" role="button" aria-controls="offcanvasCart">
+                                <i class="bi bi-cart" style="color: white;"></i>
+                                <span style="color: white;">My Cart <span class="badge bg-warning">@(ViewBag.ItemsNumber)</span></span>
+                            </a>
+
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        @*Cart HTML*@
-        <div id="container-cart">
-            <div class="CartContainer-cart">
-                <div class="Header-cart">
-                    <h3 class="Heading-cart">Shopping Cart</h3>
-                    <a asp-area="" asp-controller="Product" asp-action="ClearCart"><i class="bi bi-cart-x Action-cart"></i></a>
-                </div>
-                @foreach (KeyValuePair<Product,int> keyValuePair in @ViewBag.ShoppingCart)
-                {
-                    <div class="Cart-Items-cart">
-                        <div class="image-box-cart">
-                            <img src="https://localhost:44368/img/@(keyValuePair.Key.Name).jpg" class="cart-img" />
-                        </div>
-                        <div class="about-cart">
-                            <h1 class="title-cart">@keyValuePair.Key.Name</h1>
-                        </div>
-                        <div class="counter-cart">
-                            <div class="btn-cart">
-                                <a asp-area="" asp-controller="Product" asp-action="AddToCart" asp-route-productId="@keyValuePair.Key.Id">
-                                    +
-                                </a>
-                            </div>
-                            <div class="count-cart">@keyValuePair.Value</div>
-                            <div class="btn-cart">
-                                <a asp-area="" asp-controller="Product" asp-action="DeleteFromCart" asp-route-productId="@keyValuePair.Key.Id">
-                                    -
-                                </a>
-                            </div>
-                        </div>
-                        <div class="prices-cart">
-                            <div class="amount-cart">$@(keyValuePair.Key.DefaultPrice)</div>
-                            <div class="remove-cart">
-                                 <a asp-area="" asp-controller="Product" asp-action="RemoveFromCart" asp-route-productId="@keyValuePair.Key.Id"><i class="bi bi-x"></i></a>
-                            </div>
+
+
+    <main role="main" class="pb-3 mt-5 pt-3">
+        @RenderBody()
+    </main>
+
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart" aria-labelledby="offcanvasCartLabel" data-bs-backdrop="true">
+        <div class="offcanvas-header bg-dark text-light">
+            <h5 class="offcanvas-title" id="offcanvasCartLabel">Shopping Cart</h5>
+            <a asp-area="" asp-controller="Product" asp-action="ClearCart"><i class="bi bi-cart-x text-danger" style="font-size: 30px"></i></a>
+            @*<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>*@
+        </div>
+        <div class="offcanvas-body" style="position: relative;">
+
+            @foreach (KeyValuePair<Product, int> keyValuePair in @ViewBag.ShoppingCart)
+            {
+                <div class="Cart-Items-cart">
+                    <div class="image-box-cart">
+                        <img src="https://localhost:44368/img/@(keyValuePair.Key.Name).jpg" class="cart-img" />
+                    </div>
+                    <div class="about-cart centered">
+                        <h1 class="title-cart text-md-center">@keyValuePair.Key.Name</h1>
+                    </div>
+                    <div class="counter-cart">
+                        <a asp-area="" asp-controller="Product" asp-action="AddToCart" asp-route-productId="@keyValuePair.Key.Id">
+                            <i class="bi bi-plus-circle text-dark" style="font-size: 20px"></i>
+                        </a>
+                        <div class="count-cart">@keyValuePair.Value</div>
+                        <a asp-area="" asp-controller="Product" asp-action="DeleteFromCart" asp-route-productId="@keyValuePair.Key.Id">
+                            <i class="bi bi-dash-circle text-dark" style="font-size: 20px"></i>
+                        </a>
+                    </div>
+                    <div class="prices-cart">
+                        <div class="amount-cart">$@(keyValuePair.Key.DefaultPrice)</div>
+                        <div class="remove-cart">
+                            <a asp-area="" asp-controller="Product" asp-action="RemoveFromCart" asp-route-productId="@keyValuePair.Key.Id">
+                                <i class="bi bi-x-circle text-danger"></i>
+                            </a>
                         </div>
                     </div>
-                }
-                <hr>
-                <div class="checkout-cart">
-                    <div class="total-cart">
-                        <div>
-                            <div class="Subtotal-cart">Sub-Total</div>
-                        </div>
-                        <div class="total-amount-cart">$@(ViewBag.ShoppingCartTotal)</div>
-                    </div>
-                    <a class="btn btn-primary" style="margin-top: 5px; float: right; margin-bottom: 5px;" asp-area="" asp-controller="Product" asp-action="Checkout">Checkout</a>
                 </div>
+                <hr class="bg-dark" />
+            }
+            <div class="checkout-cart">
+                <div class="total-cart">
+                    <div>
+                        <div class="Subtotal-cart">Sub-Total</div>
+                    </div>
+                    <div class="total-amount-cart me-3">$@(ViewBag.ShoppingCartTotal)</div>
+                </div>
+                <a class="btn btn-warning" style="font-weight: bold" asp-area="" asp-controller="Product" asp-action="Checkout">Checkout</a>
             </div>
         </div>
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
     </div>
 
     <footer class="border-top footer text-muted">
@@ -121,7 +125,7 @@
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
 </body>
