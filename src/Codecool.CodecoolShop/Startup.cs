@@ -59,7 +59,6 @@ namespace Codecool.CodecoolShop
 
             app.UseAuthorization();
 
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
