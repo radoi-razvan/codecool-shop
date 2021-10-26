@@ -52,6 +52,8 @@ namespace Codecool.CodecoolShop
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            //app.UseMvc();
+
             // Session configuration
             app.UseSession();
 
