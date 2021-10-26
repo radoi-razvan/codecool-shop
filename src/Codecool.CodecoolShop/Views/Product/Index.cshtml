@@ -14,7 +14,10 @@
                     <p class="card-text">Category: @element.ProductCategory.Department</p>
                     <p class="card-text">Supplier: @element.Supplier.Name</p>
                     <p class="card-text text-center"><strong>Price: @element.DefaultPrice.ToString("C2")</strong></p>
-                    <a type="button" class="btn btn-warning" style="float: bottom; font-weight: bold" asp-area="" asp-controller="Product" asp-action="AddToCart" asp-route-productId=@element.Id>
+                    @*<a type="button" class="btn btn-warning" style="float: bottom; font-weight: bold" asp-area="" asp-controller="Product" asp-action="AddToCart" asp-route-productId=@element.Id>
+            <i class="bi bi-cart-plus" style="font-size: 20px"></i> Add To Cart
+        </a>*@
+                    <a type="button" class="btn btn-warning add-cart-btn" data-id="@element.Id" style="font-weight: bold" href="Cart/Add/@element.Id">
                         <i class="bi bi-cart-plus" style="font-size: 20px"></i> Add To Cart
                     </a>
                 </div>

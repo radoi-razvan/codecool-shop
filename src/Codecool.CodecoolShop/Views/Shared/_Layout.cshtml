@@ -56,7 +56,8 @@
                         <li class="nav-item nav-right" style="margin: auto; margin-right:0; cursor: pointer;">
                             <a class="btn nav-link" id="cartBtn" data-bs-toggle="offcanvas" href="#offcanvasCart" role="button" aria-controls="offcanvasCart">
                                 <i class="bi bi-cart" style="color: white;"></i>
-                                <span style="color: white;">My Cart <span class="badge bg-warning">@(ViewBag.ItemsNumber)</span></span>
+                                @*<span style="color: white;">My Cart <span class="badge bg-warning">@(ViewBag.ItemsNumber)</span></span>*@
+                                <span style="color: white;">My Cart <span class="badge bg-warning" id="cart-quantity">0</span></span>
                             </a>
 
                         </li>
@@ -74,12 +75,13 @@
     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart" aria-labelledby="offcanvasCartLabel" data-bs-backdrop="true">
         <div class="offcanvas-header bg-dark text-light">
             <h5 class="offcanvas-title" id="offcanvasCartLabel">Shopping Cart</h5>
-            <a asp-area="" asp-controller="Product" asp-action="ClearCart"><i class="bi bi-cart-x text-danger" style="font-size: 30px"></i></a>
+            @*<a asp-area="" asp-controller="Product" asp-action="ClearCart"><i class="bi bi-cart-x text-danger" style="font-size: 30px"></i></a>*@
+            <a href="Cart/Clear" class="cart-clear"><i class="bi bi-cart-x text-danger" style="font-size: 30px"></i></a>
             @*<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>*@
         </div>
-        <div class="offcanvas-body" style="position: relative;">
+        <div class="offcanvas-body" id="cart-container" style="position: relative;">
 
-            @foreach (KeyValuePair<Product, int> keyValuePair in @ViewBag.ShoppingCart)
+            @*@foreach (KeyValuePair<Product, int> keyValuePair in @ViewBag.ShoppingCart)
             {
                 <div class="Cart-Items-cart">
                     <div class="image-box-cart">
@@ -107,13 +109,13 @@
                     </div>
                 </div>
                 <hr class="bg-dark" />
-            }
+            }*@
             <div class="checkout-cart">
                 <div class="total-cart">
                     <div>
                         <div class="Subtotal-cart">Sub-Total</div>
                     </div>
-                    <div class="total-amount-cart me-3">$@(ViewBag.ShoppingCartTotal)</div>
+                    <div class="total-amount-cart me-3" id="cart-total-container">$0</div>
                 </div>
                 <a class="btn btn-warning" style="font-weight: bold" asp-area="" asp-controller="Product" asp-action="Checkout">Checkout</a>
             </div>
