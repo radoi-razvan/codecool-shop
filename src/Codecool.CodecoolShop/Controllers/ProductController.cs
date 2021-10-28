@@ -9,19 +9,20 @@ using Codecool.CodecoolShop.Services;
 using Microsoft.AspNetCore.Http;
 using Codecool.CodecoolShop.Utils;
 using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 
 namespace Codecool.CodecoolShop.Controllers
 {
     public class ProductController : Controller
     {
         private readonly ILogger<ProductController> _logger;
+        private readonly IConfiguration configuration;
         public ProductService ProductService { get; set; }
 
-        public ProductController(ILogger<ProductController> logger)
+        public ProductController(ILogger<ProductController> logger, IConfiguration config)
         {
             _logger = logger;
+            configuration = config;
             ProductService = new ProductService(
                 ProductDaoMemory.GetInstance(),
                 ProductCategoryDaoMemory.GetInstance(),
@@ -34,16 +35,22 @@ namespace Codecool.CodecoolShop.Controllers
             ViewBag.Categories = ProductService.GetAllCategories().ToList();
             ViewBag.Suppliers = ProductService.GetAllSuppliers().ToList();
             ViewBag.ShoppingCart = ProductService.GetCart().Products;
-            ViewBag.ShoppingCartTotal = GetCartTotalPrice(ViewBag.ShoppingCart);
+            ViewBag.ShoppingCartTotal = 0;
             ViewBag.ItemsNumber = ProductService.GetCart().Products.Values.Sum();
+        }
+
+        [Route("/get-products")]
+        public string GetAllProducts()
+        {
+            DataManager dm = new DataManager(configuration);
+            var products = dm.GetAllProducts();
+            return JsonSerializer.Serialize(products);
         }
 
         public IActionResult Index()
         {
-            var products = ProductService.GetAllProducts().ToList();
-            HttpContext.Session.Set("ProductList", products);
             GetViewData();
-            return View(products);
+            return View("Index");
         }
 
         public IActionResult Checkout()
@@ -58,13 +65,17 @@ namespace Codecool.CodecoolShop.Controllers
             return View("Payment");
         }
 
-        public IActionResult IndexByCategory(int categoryIndex)
+        [Route("/get-products/{categoryIndex}")]
+        public string IndexByCategory(int categoryIndex)
         {
             var products = ProductService.GetProductsForCategory(categoryIndex).ToList();
             HttpContext.Session.Set("ProductList", products);
             GetViewData();
-            return View("Index", products);
-        }        
+            
+            return JsonSerializer.Serialize(products);
+        }
+
+        [Route("/get-products/{supplierIndex}")]
         public IActionResult IndexBySupplier(int supplierIndex)
         {
             var products = ProductService.GetProductsForSupplier(supplierIndex).ToList();
@@ -73,40 +84,14 @@ namespace Codecool.CodecoolShop.Controllers
             return View("Index", products);
         }
 
-        //public async Task<IActionResult> Index()
-        //{
-        //    var products = await ProductService.GetAllProducts().ToList();
-        //    HttpContext.Session.Set("ProductList", products);
-        //    GetViewData();
-        //    return View(products);
-        //}
-
-        public IActionResult AddToCart(int productId)
-        {
-            var products = HttpContext.Session.GetObject<List<Product>>("ProductList");
-            ProductService.GetCart().Add(products[productId - 1]);
-            GetViewData();
-            
-            return View("\\Views\\Product\\Index.cshtml", products);
-        }
-
         [Route("Cart/Add/{productId}")]
-        public string AddToCartCustomRoute(int productId)
+        public string AddToCart(int productId)
         {
             var products = HttpContext.Session.GetObject<List<Product>>("ProductList");
             ProductService.GetCart().Add(products[productId - 1]);
             GetViewData();
 
             return GenerateCartAsJasonObject();
-        }
-
-        public IActionResult RemoveFromCart(int productId)
-        {
-            var products = HttpContext.Session.GetObject<List<Product>>("ProductList");
-            ProductService.GetCart().Remove(productId);
-            GetViewData();
-
-            return View("\\Views\\Product\\Index.cshtml", products);
         }
 
         [Route("Cart/Remove/{productId}")]
@@ -119,15 +104,6 @@ namespace Codecool.CodecoolShop.Controllers
             return GenerateCartAsJasonObject();
         }
 
-        public IActionResult DeleteFromCart(int productId)
-        {
-            var products = HttpContext.Session.GetObject<List<Product>>("ProductList");
-            ProductService.GetCart().Delete(productId);
-            GetViewData();
-
-            return View("\\Views\\Product\\Index.cshtml", products);
-        }
-
         [Route("Cart/Delete/{productId}")]
         public string DeleteFromCartCustomRoute(int productId)
         {
@@ -136,15 +112,6 @@ namespace Codecool.CodecoolShop.Controllers
             GetViewData();
 
             return GenerateCartAsJasonObject();
-        }
-
-        public IActionResult ClearCart()
-        {
-            var products = HttpContext.Session.GetObject<List<Product>>("ProductList");
-            ProductService.GetCart().Clear();
-            GetViewData();
-
-            return View("\\Views\\Product\\Index.cshtml", products);
         }
 
         [Route("Cart/Clear")]
@@ -163,37 +130,27 @@ namespace Codecool.CodecoolShop.Controllers
             return View();
         }
 
-        public decimal GetCartTotalPrice(Dictionary<Product,int> cart)
-        {
-            decimal result = 0;
-            foreach(var kv in cart)
-            {
-                result += kv.Key.DefaultPrice * kv.Value;
-            }
-            return result;
-        }
+        //public string GenerateCartAsJasonObject() {
 
-        public string GenerateCartAsJasonObject() {
+        //    var cartProducts = ProductService.GetCart().Products;
+        //    var productsList = new List<Dictionary<string, dynamic>>();
+        //    var cartDetailsDict = new Dictionary<string, dynamic>();
+        //    cartDetailsDict.Add("TotalPrice", GetCartTotalPrice(cartProducts));
+        //    cartDetailsDict.Add("TotalQuantity", cartProducts.Values.Sum());
+        //    productsList.Add(cartDetailsDict);
 
-            var cartProducts = ProductService.GetCart().Products;
-            var productsList = new List<Dictionary<string, dynamic>>();
-            var cartDetailsDict = new Dictionary<string, dynamic>();
-            cartDetailsDict.Add("TotalPrice", GetCartTotalPrice(cartProducts));
-            cartDetailsDict.Add("TotalQuantity", cartProducts.Values.Sum());
-            productsList.Add(cartDetailsDict);
+        //    foreach (KeyValuePair<Product, int> keyValuePair in cartProducts)
+        //    {
+        //        Dictionary<string, dynamic> productDict = new Dictionary<string, dynamic>();
+        //        productDict.Add("Name", $"{keyValuePair.Key.Name}");
+        //        productDict.Add("Id", keyValuePair.Key.Id);
+        //        productDict.Add("Quantity", keyValuePair.Value);
+        //        productDict.Add("Price", keyValuePair.Key.DefaultPrice);
+        //        productsList.Add(productDict);
+        //    }
 
-            foreach (KeyValuePair<Product, int> keyValuePair in cartProducts)
-            {
-                Dictionary<string, dynamic> productDict = new Dictionary<string, dynamic>();
-                productDict.Add("Name", $"{keyValuePair.Key.Name}");
-                productDict.Add("Id", keyValuePair.Key.Id);
-                productDict.Add("Quantity", keyValuePair.Value);
-                productDict.Add("Price", keyValuePair.Key.DefaultPrice);
-                productsList.Add(productDict);
-            }
-
-            return JsonSerializer.Serialize(productsList);
-        }
+        //    return JsonSerializer.Serialize(productsList);
+        //}
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()

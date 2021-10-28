@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using Codecool.CodecoolShop.Daos;
 using Codecool.CodecoolShop.Daos.Implementations;
 using Codecool.CodecoolShop.Models;
+using Codecool.CodecoolShop.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -31,9 +33,11 @@ namespace Codecool.CodecoolShop
             // Session configuration
             services.AddSession();
             services.AddMemoryCache();
-
             services.AddControllersWithViews();
+            services.AddSingleton<IConfiguration>(Configuration);
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            //Map the configuration
+            //var connectionSection = Configuration.GetSection("ConnectionStrings").GetSection("DefaultConnection").Value;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
