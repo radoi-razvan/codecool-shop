@@ -4,16 +4,33 @@ import { htmlFactory } from "./HtmlFactory.js";
 
 export let cartManager = {
     loadCart: async function () {
-        domManager.removeChildren('#productList');
+        domManager.removeChildren('#cart-container');
         const products = await dataHandler.getCartProducts();
         for (let product of products) {
             const productCard = htmlFactory.cartItemBuilder(product);
-            domManager.addChild("#productList", productCard);
-            domManager.addEventListener(".add-cart-btn", "click", addToCart)
+            domManager.addChild("#cart-container", productCard);
+            let item = document.getElementById("");
+
         }
-    }
+    },
 
     addProduct: async function () {
         const cartProducts = await dataHandler.getCartProducts();
+    },
+
+    removeProduct: async function () {
+
+    },
+
+    removeProduct: async function () {
+
+    },
+
+    clearCart: async function () {
+
     }
+}
+
+function addEventsToCartItem(cartItem) {
+
 }

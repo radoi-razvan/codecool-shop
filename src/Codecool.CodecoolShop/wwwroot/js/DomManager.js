@@ -8,8 +8,8 @@
         }
     },
 
-    addEventListener(parentIdentifier, eventType, eventHandler) {
-        let parent = document.querySelector(parentIdentifier);
+    addEventListener(parentObject, eventType, eventHandler) {
+        let parent = parentObject;
         if (parent) {
             parent.addEventListener(eventType, eventHandler);
         } else {

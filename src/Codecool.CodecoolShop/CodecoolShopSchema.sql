@@ -4,6 +4,7 @@ DROP TABLE IF EXISTS supplier;
 DROP TABLE IF EXISTS category;
 DROP TABLE IF EXISTS account;
 DROP TABLE IF EXISTS cart;
+DROP TABLE IF EXISTS cartproduct;
 DROP TABLE IF EXISTS order_info;
 
 CREATE TABLE supplier (
@@ -41,7 +42,7 @@ CREATE TABLE account (
 CREATE TABLE cart (
 	id int IDENTITY(1,1) PRIMARY KEY,
 	account_id int,
-	FOREIGN KEY (account_id) REFERENCES account(id)
+	FOREIGN KEY (account_id) REFERENCES account(id),
 );
 
 CREATE TABLE cartproduct (

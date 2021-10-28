@@ -17,12 +17,16 @@ namespace Codecool.CodecoolShop.Controllers
     {
         private readonly ILogger<ProductController> _logger;
         private readonly IConfiguration configuration;
+        private DataManager dataManager;
+
         public ProductService ProductService { get; set; }
 
         public ProductController(ILogger<ProductController> logger, IConfiguration config)
         {
             _logger = logger;
             configuration = config;
+            dataManager = new DataManager(configuration);
+
             ProductService = new ProductService(
                 ProductDaoMemory.GetInstance(),
                 ProductCategoryDaoMemory.GetInstance(),
@@ -30,104 +34,84 @@ namespace Codecool.CodecoolShop.Controllers
                 CartDaoMemory.GetInstance());
         }
 
-        private void GetViewData()
-        {
-            ViewBag.Categories = ProductService.GetAllCategories().ToList();
-            ViewBag.Suppliers = ProductService.GetAllSuppliers().ToList();
-            ViewBag.ShoppingCart = ProductService.GetCart().Products;
-            ViewBag.ShoppingCartTotal = 0;
-            ViewBag.ItemsNumber = ProductService.GetCart().Products.Values.Sum();
-        }
-
         [Route("/get-products")]
         public string GetAllProducts()
         {
-            DataManager dm = new DataManager(configuration);
-            var products = dm.GetAllProducts();
-            return JsonSerializer.Serialize(products);
+            return JsonSerializer.Serialize(dataManager.GetAllProducts());
         }
 
         public IActionResult Index()
         {
-            GetViewData();
             return View("Index");
         }
 
         public IActionResult Checkout()
         {
-            GetViewData();
             return View("Checkout");
         }
 
         public IActionResult Payment()
         {
-            GetViewData();
             return View("Payment");
         }
 
-        [Route("/get-products/{categoryIndex}")]
+        [Route("api/get-categories")]
+        public string GetCategories()
+        {
+            return JsonSerializer.Serialize(dataManager.GetAllCategories());
+        }
+
+        [Route("api/get-suppliers")]
+        public string GetSuppliers()
+        {
+            return JsonSerializer.Serialize(dataManager.GetAllSuppliers());
+        }
+
+        [Route("/get-products/category/{categoryIndex}")]
         public string IndexByCategory(int categoryIndex)
         {
-            var products = ProductService.GetProductsForCategory(categoryIndex).ToList();
-            HttpContext.Session.Set("ProductList", products);
-            GetViewData();
-            
-            return JsonSerializer.Serialize(products);
+            return JsonSerializer.Serialize(dataManager.GetProductsByCategory(categoryIndex));
         }
 
-        [Route("/get-products/{supplierIndex}")]
-        public IActionResult IndexBySupplier(int supplierIndex)
+        [Route("/get-products/supplier/{supplierIndex}")]
+        public string IndexBySupplier(int supplierIndex)
         {
-            var products = ProductService.GetProductsForSupplier(supplierIndex).ToList();
-            HttpContext.Session.Set("ProductList", products);
-            GetViewData();
-            return View("Index", products);
+            return JsonSerializer.Serialize(dataManager.GetProductsBySupplier(supplierIndex));
         }
 
-        [Route("Cart/Add/{productId}")]
-        public string AddToCart(int productId)
+        [Route("api/get-cart-products")]
+        public string GetCartProducts()
         {
-            var products = HttpContext.Session.GetObject<List<Product>>("ProductList");
-            ProductService.GetCart().Add(products[productId - 1]);
-            GetViewData();
-
-            return GenerateCartAsJasonObject();
+            return JsonSerializer.Serialize(dataManager.GetProductsInCart(0));
         }
 
-        [Route("Cart/Remove/{productId}")]
-        public string RemoveFromCartCustomRoute(int productId)
+        [Route("cart/add/{productId}")]
+        public void AddToCart(int productId)
         {
-            var products = HttpContext.Session.GetObject<List<Product>>("ProductList");
-            ProductService.GetCart().Remove(productId);
-            GetViewData();
-
-            return GenerateCartAsJasonObject();
+            dataManager.AddProductToCart(productId, 0);
         }
 
-        [Route("Cart/Delete/{productId}")]
-        public string DeleteFromCartCustomRoute(int productId)
+        [Route("cart/remove/{productId}")]
+        public void RemoveFromCart(int productId)
         {
-            var products = HttpContext.Session.GetObject<List<Product>>("ProductList");
-            ProductService.GetCart().Delete(productId);
-            GetViewData();
-
-            return GenerateCartAsJasonObject();
+            dataManager.RemoveProductFromCart(productId, 0);
         }
 
-        [Route("Cart/Clear")]
-        public string ClearCartCustomRoute()
+        [Route("cart/delete/{productId}")]
+        public void DeleteFromCart(int productId)
         {
-            var products = HttpContext.Session.GetObject<List<Product>>("ProductList");
-            ProductService.GetCart().Clear();
-            GetViewData();
+            dataManager.DeleteProductFromCart(productId, 0);
+        }
 
-            return GenerateCartAsJasonObject();
+        [Route("cart/clear")]
+        public void ClearCart()
+        {
+            dataManager.ClearCart(0);
         }
 
         public IActionResult Privacy()
         {
-            GetViewData();
-            return View();
+            return View("Privacy");
         }
 
         //public string GenerateCartAsJasonObject() {

@@ -3,10 +3,13 @@
 
 // Write your JavaScript code.
 import { productsManager } from "./ProductsManager.js";
+import { layoutManager } from "./LayoutManager.js";
 
 const init = () => {
 
+    layoutManager.loadLayoutElements();
     productsManager.loadProducts();
+
 }
 
 init();
