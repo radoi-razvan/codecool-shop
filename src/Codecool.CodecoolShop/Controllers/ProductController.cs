@@ -111,13 +111,11 @@ namespace Codecool.CodecoolShop.Controllers
 
         public IActionResult Register()
         {
-            GetViewData();
             return View("Register");
         }
 
         public IActionResult Login()
         {
-            GetViewData();
             return View("Login");
         }
 
