@@ -11,7 +11,7 @@ export let cartManager = {
             domManager.addChild("#productList", productCard);
             domManager.addEventListener(".add-cart-btn", "click", addToCart)
         }
-    }
+    },
 
     addProduct: async function () {
         const cartProducts = await dataHandler.getCartProducts();

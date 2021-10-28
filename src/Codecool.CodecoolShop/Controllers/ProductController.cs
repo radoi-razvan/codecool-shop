@@ -124,33 +124,46 @@ namespace Codecool.CodecoolShop.Controllers
             return GenerateCartAsJasonObject();
         }
 
+        public IActionResult Register()
+        {
+            GetViewData();
+            return View("Register");
+        }
+
+        public IActionResult Login()
+        {
+            GetViewData();
+            return View("Login");
+        }
+
         public IActionResult Privacy()
         {
             GetViewData();
             return View();
         }
 
-        //public string GenerateCartAsJasonObject() {
+        public string GenerateCartAsJasonObject()
+        {
 
-        //    var cartProducts = ProductService.GetCart().Products;
-        //    var productsList = new List<Dictionary<string, dynamic>>();
-        //    var cartDetailsDict = new Dictionary<string, dynamic>();
-        //    cartDetailsDict.Add("TotalPrice", GetCartTotalPrice(cartProducts));
-        //    cartDetailsDict.Add("TotalQuantity", cartProducts.Values.Sum());
-        //    productsList.Add(cartDetailsDict);
+            var cartProducts = ProductService.GetCart().Products;
+            var productsList = new List<Dictionary<string, dynamic>>();
+            var cartDetailsDict = new Dictionary<string, dynamic>();
+            // cartDetailsDict.Add("TotalPrice", GetCartTotalPrice(cartProducts));
+            cartDetailsDict.Add("TotalQuantity", cartProducts.Values.Sum());
+            productsList.Add(cartDetailsDict);
 
-        //    foreach (KeyValuePair<Product, int> keyValuePair in cartProducts)
-        //    {
-        //        Dictionary<string, dynamic> productDict = new Dictionary<string, dynamic>();
-        //        productDict.Add("Name", $"{keyValuePair.Key.Name}");
-        //        productDict.Add("Id", keyValuePair.Key.Id);
-        //        productDict.Add("Quantity", keyValuePair.Value);
-        //        productDict.Add("Price", keyValuePair.Key.DefaultPrice);
-        //        productsList.Add(productDict);
-        //    }
+            foreach (KeyValuePair<Product, int> keyValuePair in cartProducts)
+            {
+                Dictionary<string, dynamic> productDict = new Dictionary<string, dynamic>();
+                productDict.Add("Name", $"{keyValuePair.Key.Name}");
+                productDict.Add("Id", keyValuePair.Key.Id);
+                productDict.Add("Quantity", keyValuePair.Value);
+                productDict.Add("Price", keyValuePair.Key.DefaultPrice);
+                productsList.Add(productDict);
+            }
 
-        //    return JsonSerializer.Serialize(productsList);
-        //}
+            return JsonSerializer.Serialize(productsList);
+        }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
