@@ -4,13 +4,23 @@
         return response
     },
 
-    getProductsByCategory: async function (supplierId) {
-        let response = await apiGet(`/get-products/${supplierId}`);
+    getCategories: async function () {
+        let response = await apiGet('api/get-categories')
         return response
     },
 
-    getProductsBySupplier: async function (categoryId) {
-        let response = await apiGet(`/get-products/${categoryId}`);
+    getSuppliers: async function () {
+        let response = await apiGet('api/get-suppliers')
+        return response
+    },
+
+    getProductsByCategory: async function (categoryId) {
+        let response = await apiGet(`/get-products/category/${categoryId}`);
+        return response
+    },
+
+    getProductsBySupplier: async function (supplierId) {
+        let response = await apiGet(`/get-products/supplier/${supplierId}`);
         return response
     },
 
@@ -20,8 +30,23 @@
     },
 
     addProductToCart: async function (productId) {
-        let response = await apiPut(`Cart/Add/${productId}`)
+        let response = await apiPut(`cart/add/${productId}`)
         return response
+    },
+
+    deleteProductFromCart: async function (productId) {
+        let response = await apiDelete(`cart/delete/${productId}`);
+        return response;
+    },
+
+    removeProductFromCart: async function (productId) {
+        let response = await apiPut(`cart/remove/${productId}`);
+        return response;
+    },
+
+    clearCart: async function () {
+        let response = await apiDelete(`cart/clear`);
+        return response;
     }
 }
 

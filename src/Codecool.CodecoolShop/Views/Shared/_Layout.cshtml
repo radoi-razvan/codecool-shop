@@ -25,29 +25,23 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index"><span style="color: white;">Home</span></a>
                         </li>
+
                         <li class="dropdown show">
-                            <a class="dropdown-toggle" style="text-decoration: none; color: white;" role="button" id="dropdownMenuCategories" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="dropdown-toggle" style="text-decoration: none; color: white;" role="button" id="dropdownMenuCategoriesTitle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Categories
                             </a>
 
-                            <div id="dropdownMenuCategories" class="dropdown-menu" aria-labelledby="dropdownMenuCategories" style="padding-top: ">
-                                @foreach (var element in @ViewBag.Categories)
-                                {
-                                    <a class="dropdown-item" asp-controller="Product" asp-action="IndexByCategory" asp-route-categoryIndex="@element.Id">@(element.Name)s</a>
-                                }
+                            <div id="dropdownMenuCategories" class="dropdown-menu" aria-labelledby="dropdownMenuCategoriesTitle">
+
                             </div>
                         </li>
+
                         <li class="dropdown show">
-                            <a class="dropdown-toggle" style="text-decoration: none; color: white;" role="button" id="dropdownMenuSuppliers" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="dropdown-toggle" style="text-decoration: none; color: white;" role="button" id="dropdownMenuSuppliersTitle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Suppliers
                             </a>
 
-                            <div id="dropdownMenuSuppliers" class="dropdown-menu" aria-labelledby="dropdownMenuSuppliers">
-                                @foreach (var element in @ViewBag.Suppliers)
-                                {
-                                    <a class="dropdown-item" asp-area="" asp-controller="Product" asp-action="IndexBySupplier" asp-route-supplierIndex="@element.Id">@(element.Name)</a>
-                                }
-                            </div>
+                            <div id="dropdownMenuSuppliers" class="dropdown-menu" aria-labelledby="dropdownMenuSuppliersTitle"></div>
                         </li>
 
                         <li class="nav-item">
@@ -87,35 +81,7 @@
         </div>
         <div class="offcanvas-body" id="cart-container" style="position: relative;">
 
-            @*@foreach (KeyValuePair<Product, int> keyValuePair in @ViewBag.ShoppingCart)
-            {
-                <div class="Cart-Items-cart">
-                    <div class="image-box-cart">
-                        <img src="https://localhost:44368/img/@(keyValuePair.Key.Name).jpg" class="cart-img" />
-                    </div>
-                    <div class="about-cart centered">
-                        <h1 class="title-cart text-md-center">@keyValuePair.Key.Name</h1>
-                    </div>
-                    <div class="counter-cart">
-                        <a asp-area="" asp-controller="Product" asp-action="AddToCart" asp-route-productId="@keyValuePair.Key.Id">
-                            <i class="bi bi-plus-circle text-dark" style="font-size: 20px"></i>
-                        </a>
-                        <div class="count-cart">@keyValuePair.Value</div>
-                        <a asp-area="" asp-controller="Product" asp-action="DeleteFromCart" asp-route-productId="@keyValuePair.Key.Id">
-                            <i class="bi bi-dash-circle text-dark" style="font-size: 20px"></i>
-                        </a>
-                    </div>
-                    <div class="prices-cart">
-                        <div class="amount-cart">$@(keyValuePair.Key.DefaultPrice)</div>
-                        <div class="remove-cart">
-                            <a asp-area="" asp-controller="Product" asp-action="RemoveFromCart" asp-route-productId="@keyValuePair.Key.Id">
-                                <i class="bi bi-x-circle text-danger"></i>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <hr class="bg-dark" />
-            }*@
+           
             <div class="checkout-cart">
                 <div class="total-cart">
                     <div>
