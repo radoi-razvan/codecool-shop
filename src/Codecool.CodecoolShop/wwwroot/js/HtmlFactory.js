@@ -56,7 +56,7 @@
                     }.jpg" style="height: 50%; width: 50%; align-self: center; padding-top: 10px">
                     <div class="card-body">
                         <h5 class="card-title">${product.Name}</h5>
-                        <p class="card-text">${product.Description}.</p>
+                        <p class="card-text card-description">${product.Description}.</p>
                         <p class="card-text">Category: ${
                           product.ProductCategory.Department
                         }</p>

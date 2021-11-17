@@ -98,17 +98,28 @@ body {
     border-radius: 5px;
 }
 
-    .card:hover {
-        box-shadow: 0 16px 32px 0 rgba(0,0,0,0.5);
-    }
+.card:hover {
+    box-shadow: 0 16px 32px 0 rgba(0,0,0,0.5);
+}
 
-    .card img {
-        border-radius: 5px 5px 0 0;
-    }
+.card img {
+    border-radius: 5px 5px 0 0;
+}
 
 .card-container {
     display: inline-block;
     padding: 10px;
+}
+
+.card-description {
+    max-height: 100px;
+    min-height: 100px;
+    overflow: auto;
+}
+
+.card-title {
+    max-height: 50px;
+    min-height: 50px;
 }
 
 /* Cart CSS */
