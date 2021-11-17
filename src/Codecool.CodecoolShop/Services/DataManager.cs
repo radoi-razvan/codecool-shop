@@ -167,7 +167,7 @@ namespace Codecool.CodecoolShop.Services
                                 FROM product p 
                                 INNER JOIN category c on c.id = p.category_id
                                 INNER JOIN supplier s on s.id = p.supplier_id
-                                INNER JOIN cartproduct cp on cp.product_id = p.id
+                                INNER JOIN cart_product cp on cp.product_id = p.id
                                 WHERE cp.cart_id = @cartId";
             SqlCommand command = new SqlCommand(sqlQuery, connection);
             command.Parameters.AddWithValue("@cartId", cartId);
@@ -213,7 +213,7 @@ namespace Codecool.CodecoolShop.Services
         public void AddProductToCart(int productId, int cartId)
         {
             SqlConnection connection = new SqlConnection(ConnectionString);
-            string sqlQueryCheck = @"SELECT cart_id, product_id, quantity FROM cartproduct WHERE cart_id = @cartId AND product_id = @productId";
+            string sqlQueryCheck = @"SELECT cart_id, product_id, quantity FROM cart_product WHERE cart_id = @cartId AND product_id = @productId";
             SqlCommand command1 = new SqlCommand(sqlQueryCheck, connection);
             command1.Parameters.AddWithValue("@cartId", cartId);
             command1.Parameters.AddWithValue("@productId", productId);
@@ -224,7 +224,7 @@ namespace Codecool.CodecoolShop.Services
 
             if(productInCart)
             {
-                string sqlQueryUpdate= @"UPDATE cartproduct SET quantity = quantity + 1 WHERE cart_id = @cartId AND product_id = @productId";
+                string sqlQueryUpdate= @"UPDATE cart_product SET quantity = quantity + 1 WHERE cart_id = @cartId AND product_id = @productId";
                 SqlCommand command2 = new SqlCommand(sqlQueryUpdate, connection);
                 command2.Parameters.AddWithValue("@cartId", cartId);
                 command2.Parameters.AddWithValue("@productId", productId);
@@ -234,7 +234,7 @@ namespace Codecool.CodecoolShop.Services
             } 
             else
             {
-                string sqlQueryInsert = @"INSERT INTO cartproduct(cart_id, product_id, quantity) VALUES (@cartId, @productId, 1)";
+                string sqlQueryInsert = @"INSERT INTO cart_product(cart_id, product_id, quantity) VALUES (@cartId, @productId, 1)";
                 SqlCommand command3 = new SqlCommand(sqlQueryInsert, connection);
                 command3.Parameters.AddWithValue("@cartId", cartId);
                 command3.Parameters.AddWithValue("@productId", productId);
@@ -247,7 +247,7 @@ namespace Codecool.CodecoolShop.Services
         public void IncreaseProductQuantity(int productId, int cartId)
         {
             SqlConnection connection = new SqlConnection(ConnectionString);
-            string sqlQuery = @"UPDATE cartproduct SET quantity = quantity + 1 WHERE cart_id = @cartId AND product_id = @productId";
+            string sqlQuery = @"UPDATE cart_product SET quantity = quantity + 1 WHERE cart_id = @cartId AND product_id = @productId";
             SqlCommand command = new SqlCommand(sqlQuery, connection);
             command.Parameters.AddWithValue("@cartId", cartId);
             command.Parameters.AddWithValue("@productId", productId);
@@ -259,7 +259,7 @@ namespace Codecool.CodecoolShop.Services
         public void RemoveProductFromCart(int productId, int cartId)
         {
             SqlConnection connection = new SqlConnection(ConnectionString);
-            string sqlQuery = @"UPDATE cartproduct SET quantity = quantity - 1 WHERE cart_id = @cartId AND product_id = @productId";
+            string sqlQuery = @"UPDATE cart_product SET quantity = quantity - 1 WHERE cart_id = @cartId AND product_id = @productId";
             SqlCommand command1 = new SqlCommand(sqlQuery, connection);
             command1.Parameters.AddWithValue("@cartId", cartId);
             command1.Parameters.AddWithValue("@productId", productId);
@@ -268,7 +268,7 @@ namespace Codecool.CodecoolShop.Services
             connection.Close();
 
             int currentQuantity = 1;
-            string sqlQueryCheck = @"SELECT quantity FROM cartproduct WHERE cart_id = @cartId AND product_id = @productId";
+            string sqlQueryCheck = @"SELECT quantity FROM cart_product WHERE cart_id = @cartId AND product_id = @productId";
             SqlCommand command2 = new SqlCommand(sqlQueryCheck, connection);
             command2.Parameters.AddWithValue("@cartId", cartId);
             command2.Parameters.AddWithValue("@productId", productId);
@@ -292,7 +292,7 @@ namespace Codecool.CodecoolShop.Services
         public void DeleteProductFromCart(int productId, int cartId)
         {
             SqlConnection connection = new SqlConnection(ConnectionString);
-            string sqlQuery = @"DELETE FROM cartproduct WHERE @productId = product_id AND @cartId = cart_id";
+            string sqlQuery = @"DELETE FROM cart_product WHERE @productId = product_id AND @cartId = cart_id";
             SqlCommand command = new SqlCommand(sqlQuery, connection);
             command.Parameters.AddWithValue("@cartId", cartId);
             command.Parameters.AddWithValue("@productId", productId);
@@ -304,7 +304,7 @@ namespace Codecool.CodecoolShop.Services
         public void ClearCart(int cartId)
         {
             SqlConnection connection = new SqlConnection(ConnectionString);
-            string sqlQuery = @"DELETE FROM cartproduct WHERE @cartId = cart_id";
+            string sqlQuery = @"DELETE FROM cart_product WHERE @cartId = cart_id";
             SqlCommand command = new SqlCommand(sqlQuery, connection);
             command.Parameters.AddWithValue("@cartId", cartId);
             connection.Open();
