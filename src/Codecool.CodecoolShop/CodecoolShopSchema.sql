@@ -3,8 +3,8 @@ DROP TABLE IF EXISTS product;
 DROP TABLE IF EXISTS supplier;
 DROP TABLE IF EXISTS category;
 DROP TABLE IF EXISTS account;
-DROP TABLE IF EXISTS cart;
 DROP TABLE IF EXISTS cartproduct;
+DROP TABLE IF EXISTS cart;
 DROP TABLE IF EXISTS order_info;
 
 CREATE TABLE supplier (
@@ -46,11 +46,12 @@ CREATE TABLE cart (
 );
 
 CREATE TABLE cartproduct (
-	id int IDENTITY (1,1) PRIMARY KEY,
+	-- id int IDENTITY (1,1) PRIMARY KEY,
 	cart_id int,
 	FOREIGN KEY (cart_id) REFERENCES cart(id), 
 	product_id int,
 	FOREIGN KEY (product_id) REFERENCES product(id),
+	quantity int,
 );
 
 INSERT INTO category(name, department, description) VALUES
@@ -127,3 +128,5 @@ INSERT INTO supplier (name, description) VALUES
 	(SELECT id FROM category WHERE name = 'Stove'), (SELECT id FROM supplier WHERE name = 'Primer'))
 	;
 
+INSERT INTO account(username, email, password) VALUES ('Bob', 'bob_doe@gmail.com', 'bob_password');
+INSERT INTO cart(account_id) VALUES (1);
