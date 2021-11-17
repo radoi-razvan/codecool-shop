@@ -64,7 +64,7 @@
                         <p class="card-text text-center"><strong>Price: $${parseFloat(
                           product.DefaultPrice
                         ).toFixed(2)}</strong></p>
-                            <span type="button" class="bi bi-cart-plus btn btn-warning add-cart-btn text-center" data-product="dataProduct-${
+                            <span type="button" class="btn btn-warning add-cart-btn text-center" data-product="dataProduct-${
         product.Id
         }" id="product${product.Id
     }" style="font-weight: bold; width: 100%;">Add To Cart</span>
