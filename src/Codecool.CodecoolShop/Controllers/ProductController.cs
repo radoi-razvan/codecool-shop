@@ -125,11 +125,6 @@ namespace Codecool.CodecoolShop.Controllers
             return View("Login");
         }
 
-        public IActionResult Privacy()
-        {
-            return View("Privacy");
-        }
-
         //public string GenerateCartAsJasonObject() {
 
         //    var cartProducts = ProductService.GetCart().Products;

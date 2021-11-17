@@ -42,7 +42,7 @@
                     </div>
                     <div class="total-amount-cart me-3" id="cart-total-container">$${productSum}</div>
                 </div>
-                <a class="btn btn-warning" style="font-weight: bold" asp-area="" asp-controller="Product" asp-action="Checkout">Checkout</a>
+                <a class="btn btn-warning" style="font-weight: bold" href="/Product/Checkout">Checkout</a>
             </div>`;
   },
 

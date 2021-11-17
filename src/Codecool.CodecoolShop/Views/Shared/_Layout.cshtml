@@ -23,9 +23,6 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Index"><span style="color: white;">Home</span></a>
-                        </li>
-
                         <li class="dropdown show">
                             <a class="dropdown-toggle" style="text-decoration: none; color: white;" role="button" id="dropdownMenuCategoriesTitle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Categories
@@ -43,23 +40,23 @@
 
                             <div id="dropdownMenuSuppliers" class="dropdown-menu" aria-labelledby="dropdownMenuSuppliersTitle"></div>
                         </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Privacy"><span style="color: white;">Privacy</span></a>
-                        </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Register"><span style="color: white;">Register</span></a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Login"><span style="color: white;">Login</span></a>
                         </li>
-                        <li class="nav-item nav-right" style="margin: auto; margin-right:0; cursor: pointer;">
-                            <a class="btn nav-link" id="cartBtn" data-bs-toggle="offcanvas" href="#offcanvasCart" role="button" aria-controls="offcanvasCart">
-                                <i class="bi bi-cart" style="color: white;"></i>
-                                <span style="color: white; cursor: pointer;">My Cart <span class="badge bg-warning" id="cart-quantity">0</span></span>
-                            </a>
+                        @if ((Context.Request.Path == "/"))
+                        {
+                            <li class="nav-item nav-right" style="margin: auto; margin-right:0; cursor: pointer;">
+                                <a class="btn nav-link" id="cartBtn" data-bs-toggle="offcanvas" href="#offcanvasCart" role="button" aria-controls="offcanvasCart">
+                                    <i class="bi bi-cart" style="color: white;"></i>
+                                    <span style="color: white; cursor: pointer;">My Cart <span class="badge bg-warning" id="cart-quantity">0</span></span>
+                                </a>
 
-                        </li>
+                            </li>
+                        }
+
                     </ul>
                 </div>
             </div>
@@ -83,7 +80,7 @@
 
     <footer class="border-top footer text-muted">
         <div class="container" style="color: white;">
-            &copy; 2021 - <span class="text-warning">CodecoolShop</span> - <a style="color: white;" asp-area="" asp-controller="Product" asp-action="Privacy">Privacy</a>
+            &copy; 2021 - <span class="text-warning">CodecoolShop</span>
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
