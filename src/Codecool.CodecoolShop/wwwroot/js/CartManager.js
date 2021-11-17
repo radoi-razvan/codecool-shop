@@ -3,21 +3,25 @@ import { domManager } from "./DomManager.js";
 import { htmlFactory } from "./HtmlFactory.js";
 
 export let cartManager = {
-  loadCart: async function () {
-    domManager.removeChildren("#cart-container");
-    const products = await dataHandler.getCartProducts();
-    let productsSum = 0;
-    for (let product of products) {
-      productsSum +=
-        parseFloat(product.DefaultPrice).toFixed(2) *
-        product.CartProduct.Quantity;
-      const productCard = htmlFactory.cartItemBuilder(product);
-      domManager.addChild("#cart-container", productCard);
+loadCart: async function () {
+    const cShop = document.getElementById("cShop");
+    const currentPath = cShop.dataset.path;
+    if (currentPath == "/") {
+        domManager.removeChildren("#cart-container");
+        const products = await dataHandler.getCartProducts();
+        let productsSum = 0;
+        for (let product of products) {
+            productsSum +=
+                parseFloat(product.DefaultPrice).toFixed(2) *
+                product.CartProduct.Quantity;
+            const productCard = htmlFactory.cartItemBuilder(product);
+            domManager.addChild("#cart-container", productCard);
+        }
+        const sumCard = htmlFactory.cartTotalBuilder(productsSum);
+        domManager.addChild("#cart-container", sumCard);
+        addEventsToCartItems();
+        displayCartCount(products);
     }
-    const sumCard = htmlFactory.cartTotalBuilder(productsSum);
-    domManager.addChild("#cart-container", sumCard);
-    addEventsToCartItems();
-    displayCartCount(products);
   },
 
   addProduct: async function (productId) {
@@ -43,40 +47,56 @@ export let cartManager = {
   clearCart: async function () {
     await dataHandler.clearCart();
     this.loadCart();
+    },
+
+  addClearCartEvent: function () {
+    const cartClearBtn = document.getElementById("cart-clear");
+    cartClearBtn.addEventListener("click", (event) => {
+      event.preventDefault();
+      this.clearCart();
+    });
   },
+
+  //  checkPath: function () {
+  //      const cartBtn = document.getElementById("cartBtn");
+  //      const currentPath = cartBtn.dataset.path;
+  //      if (currentPath !== "/") {
+  //          cartBtn.style.display = "none";
+  //      }
+  //      else {
+  //          cartBtn.style.display = "block";
+  //      }
+  //},
 };
 
 function addEventsToCartItems() {
   const increaseBtns = document.querySelectorAll(".product-increase");
   const decreaseBtns = document.querySelectorAll(".product-remove");
   const deleteBtns = document.querySelectorAll(".product-delete");
-  const cartClearBtn = document.getElementById("cart-clear");
 
   for (let iBtn of increaseBtns) {
     iBtn.addEventListener("click", (event) => {
-      event.preventDefault();
-      cartManager.increaseProduct(event.target.dataset.increase.split("-")[1]);
+        event.preventDefault();
+        const currentEvent = event.target;
+        cartManager.increaseProduct(currentEvent.dataset.increase.split("-")[1]);
     });
   }
 
   for (let dBtn of decreaseBtns) {
     dBtn.addEventListener("click", (event) => {
       event.preventDefault();
-      cartManager.removeProduct(event.target.dataset.remove.split("-")[1]);
+      const currentEvent = event.target;
+      cartManager.removeProduct(currentEvent.dataset.remove.split("-")[1]);
     });
   }
 
   for (let deBtn of deleteBtns) {
     deBtn.addEventListener("click", (event) => {
-      event.preventDefault();
-      cartManager.deleteProduct(event.target.dataset.delete.split("-")[1]);
+        event.preventDefault();
+        const currentEvent = event.target;
+        cartManager.deleteProduct(currentEvent.dataset.delete.split("-")[1]);
     });
   }
-
-  cartClearBtn.addEventListener("click", (event) => {
-    event.preventDefault();
-    cartManager.clearCart();
-  });
 }
 
 function displayCartCount(products) {

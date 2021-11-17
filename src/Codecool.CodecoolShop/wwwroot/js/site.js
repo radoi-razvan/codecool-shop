@@ -10,6 +10,7 @@ const init = () => {
   layoutManager.loadLayoutElements();
   productsManager.loadProducts();
   cartManager.loadCart();
+  cartManager.addClearCartEvent();
 };
 
 init();

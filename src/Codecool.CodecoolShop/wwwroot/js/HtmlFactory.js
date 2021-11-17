@@ -47,9 +47,7 @@
   },
 
   cardBuilder: function (product) {
-    return `<div id="product${
-      product.Id
-    }" class="col-lg-3 col-lg-3 card-container" style="max-width: 350px;">
+    return `<div class="col-lg-3 col-lg-3 card-container" style="max-width: 350px;">
                 <div class="card">
                     <img src="https://localhost:44368/img/${
                       product.Name
@@ -66,11 +64,10 @@
                         <p class="card-text text-center"><strong>Price: $${parseFloat(
                           product.DefaultPrice
                         ).toFixed(2)}</strong></p>
-                        <a type="button" class="btn btn-warning add-cart-btn" data-product="dataProduct-${
-                          product.Id
-                        }" style="font-weight: bold">
-                            <i class="bi bi-cart-plus" style="font-size: 20px"></i> Add To Cart
-                        </a>
+                            <span type="button" class="bi bi-cart-plus btn btn-warning add-cart-btn text-center" data-product="dataProduct-${
+        product.Id
+        }" id="product${product.Id
+    }" style="font-weight: bold; width: 100%;">Add To Cart</span>
                     </div>
                 </div>
             </div>`;
