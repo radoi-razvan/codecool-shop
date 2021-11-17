@@ -23,7 +23,7 @@ export let productsManager = {
 function addToCart(clickEvent) {
     clickEvent.preventDefault();
     const target = clickEvent.target;
-    //cartManager.addProduct(target.dataset.product);
+    cartManager.addProduct(target.dataset.product.split("-")[1]);
 }
 
 function generateProductCards(products) {

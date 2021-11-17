@@ -4,12 +4,13 @@
 // Write your JavaScript code.
 import { productsManager } from "./ProductsManager.js";
 import { layoutManager } from "./LayoutManager.js";
+import { cartManager } from "./CartManager.js";
 
 const init = () => {
 
     layoutManager.loadLayoutElements();
     productsManager.loadProducts();
-
+    cartManager.loadCart();
 }
 
 init();

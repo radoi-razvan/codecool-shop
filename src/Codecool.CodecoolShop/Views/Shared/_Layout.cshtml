@@ -57,7 +57,7 @@
                             <a class="btn nav-link" id="cartBtn" data-bs-toggle="offcanvas" href="#offcanvasCart" role="button" aria-controls="offcanvasCart">
                                 <i class="bi bi-cart" style="color: white;"></i>
                                 @*<span style="color: white;">My Cart <span class="badge bg-warning">@(ViewBag.ItemsNumber)</span></span>*@
-                                <span style="color: white;">My Cart <span class="badge bg-warning" id="cart-quantity">0</span></span>
+                                <span style="color: white; cursor: pointer;">My Cart <span class="badge bg-warning" id="cart-quantity">0</span></span>
                             </a>
 
                         </li>
@@ -76,13 +76,13 @@
         <div class="offcanvas-header bg-dark text-light">
             <h5 class="offcanvas-title" id="offcanvasCartLabel">Shopping Cart</h5>
             @*<a asp-area="" asp-controller="Product" asp-action="ClearCart"><i class="bi bi-cart-x text-danger" style="font-size: 30px"></i></a>*@
-            <a href="Cart/Clear" class="cart-clear"><i class="bi bi-cart-x text-danger" style="font-size: 30px"></i></a>
+            <i id="cart-clear" class="bi bi-cart-x text-danger" style="font-size: 30px"></i>
             @*<button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>*@
         </div>
         <div class="offcanvas-body" id="cart-container" style="position: relative;">
 
            
-            <div class="checkout-cart">
+            @*<div class="checkout-cart">
                 <div class="total-cart">
                     <div>
                         <div class="Subtotal-cart">Sub-Total</div>
@@ -90,7 +90,7 @@
                     <div class="total-amount-cart me-3" id="cart-total-container">$0</div>
                 </div>
                 <a class="btn btn-warning" style="font-weight: bold" asp-area="" asp-controller="Product" asp-action="Checkout">Checkout</a>
-            </div>
+            </div>*@
         </div>
     </div>
 

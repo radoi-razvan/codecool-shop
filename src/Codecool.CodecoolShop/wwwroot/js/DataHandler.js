@@ -25,22 +25,27 @@
     },
 
     getCartProducts: async function () {
-        let response = await apiGet('/get-cart-products')
+        let response = await apiGet('api/get-cart-products')
         return response
     },
 
     addProductToCart: async function (productId) {
-        let response = await apiPut(`cart/add/${productId}`)
+        let response = await apiPost(`cart/add/${productId}`)
         return response
     },
 
-    deleteProductFromCart: async function (productId) {
-        let response = await apiDelete(`cart/delete/${productId}`);
-        return response;
+    increaseProductQuantity: async function (productId) {
+        let response = await apiPut(`cart/increase/${productId}`)
+        return response
     },
 
     removeProductFromCart: async function (productId) {
         let response = await apiPut(`cart/remove/${productId}`);
+        return response;
+    },
+
+    deleteProductFromCart: async function (productId) {
+        let response = await apiDelete(`cart/delete/${productId}`);
         return response;
     },
 
@@ -59,15 +64,13 @@
         }
     }
 
-    async function apiPost(url, payload) {
+    async function apiPost(url) {
         const response = await fetch(url, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload),
+            headers: { 'Content-Type': 'application/json' }
         })
         if (response.ok) {
-            const data = response.json();
-            return data;
+            console.log("POST request succeeded");
         }
     }
 
@@ -77,8 +80,7 @@
             headers: { 'Content-Type': 'application/json' }
         })
         if (response.ok) {
-            const data = response.json()
-            return data
+            console.log("DELETE request succeeded");
         }
     }
 
@@ -88,7 +90,6 @@
             headers: { 'Content-Type': 'application/json' }
         })
         if (response.ok) {
-            const data = response.json()
-            return data
+            console.log("Put request succeeded");
         }
     }
