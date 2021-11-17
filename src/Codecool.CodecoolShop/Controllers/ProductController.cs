@@ -82,31 +82,37 @@ namespace Codecool.CodecoolShop.Controllers
         [Route("api/get-cart-products")]
         public string GetCartProducts()
         {
-            return JsonSerializer.Serialize(dataManager.GetProductsInCart(0));
+            return JsonSerializer.Serialize(dataManager.GetProductsInCart(1));
         }
 
         [Route("cart/add/{productId}")]
         public void AddToCart(int productId)
         {
-            dataManager.AddProductToCart(productId, 0);
+            dataManager.AddProductToCart(productId, 1);
+        }
+
+        [Route("cart/increase/{productId}")]
+        public void IncreaseProductQuantityInCart(int productId)
+        {
+            dataManager.IncreaseProductQuantity(productId, 1);
         }
 
         [Route("cart/remove/{productId}")]
         public void RemoveFromCart(int productId)
         {
-            dataManager.RemoveProductFromCart(productId, 0);
+            dataManager.RemoveProductFromCart(productId, 1);
         }
 
         [Route("cart/delete/{productId}")]
         public void DeleteFromCart(int productId)
         {
-            dataManager.DeleteProductFromCart(productId, 0);
+            dataManager.DeleteProductFromCart(productId, 1);
         }
 
         [Route("cart/clear")]
         public void ClearCart()
         {
-            dataManager.ClearCart(0);
+            dataManager.ClearCart(1);
         }
 
         public IActionResult Register()
