@@ -1,11 +1,13 @@
-
+DROP TABLE IF EXISTS cart_product;
+DROP TABLE IF EXISTS cartproduct;
+DROP TABLE IF EXISTS order_product;
 DROP TABLE IF EXISTS product;
 DROP TABLE IF EXISTS supplier;
 DROP TABLE IF EXISTS category;
-DROP TABLE IF EXISTS account;
-DROP TABLE IF EXISTS cartproduct;
 DROP TABLE IF EXISTS cart;
-DROP TABLE IF EXISTS order_info;
+DROP TABLE IF EXISTS client_order;
+DROP TABLE IF EXISTS account;
+
 
 CREATE TABLE supplier (
     id int IDENTITY(1,1) PRIMARY KEY,
@@ -45,10 +47,32 @@ CREATE TABLE cart (
 	FOREIGN KEY (account_id) REFERENCES account(id),
 );
 
-CREATE TABLE cartproduct (
-	-- id int IDENTITY (1,1) PRIMARY KEY,
+CREATE TABLE cart_product (
 	cart_id int,
 	FOREIGN KEY (cart_id) REFERENCES cart(id), 
+	product_id int,
+	FOREIGN KEY (product_id) REFERENCES product(id),
+	quantity int,
+);
+
+CREATE TABLE client_order (
+	id int IDENTITY(1,1) PRIMARY KEY,
+	account_id int,
+	FOREIGN KEY (account_id) REFERENCES account(id),
+	order_status VARCHAR(100) NOT NULL,
+	first_name VARCHAR(100) NOT NULL,
+	last_name VARCHAR(100) NOT NULL,
+	client_email VARCHAR(100) NOT NULL,
+	client_address VARCHAR(100) NOT NULL,
+	phone_number VARCHAR(50) NOT NULL,
+	country VARCHAR(50) NOT NULL,
+	city VARCHAR(50) NOT NULL,
+	zip_code VARCHAR(10) NOT NULL,
+);
+
+CREATE TABLE order_product (
+	client_order_id int,
+	FOREIGN KEY (client_order_id) REFERENCES client_order(id), 
 	product_id int,
 	FOREIGN KEY (product_id) REFERENCES product(id),
 	quantity int,
