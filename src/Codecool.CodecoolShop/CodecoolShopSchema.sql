@@ -68,6 +68,7 @@ CREATE TABLE client_order (
 	country VARCHAR(50) NOT NULL,
 	city VARCHAR(50) NOT NULL,
 	zip_code VARCHAR(10) NOT NULL,
+	order_date DATETIME,
 );
 
 CREATE TABLE order_product (
