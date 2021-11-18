@@ -403,7 +403,7 @@ namespace Codecool.CodecoolShop.Services
         {
             List<int> orderIdList = new List<int>() { };
             SqlConnection connection = new SqlConnection(ConnectionString);
-            string sqlQueryOrderIdCheck = @"SELECT id FROM client_order WHERE account_id = @userId;";
+            string sqlQueryOrderIdCheck = @"SELECT id FROM client_order WHERE account_id = @userId ORDER BY id DESC;";
             SqlCommand commandUserId = new SqlCommand(sqlQueryOrderIdCheck, connection);
             commandUserId.Parameters.AddWithValue("@userId", userId);
             connection.Open();

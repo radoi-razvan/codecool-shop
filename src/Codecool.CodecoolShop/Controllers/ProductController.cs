@@ -55,6 +55,23 @@ namespace Codecool.CodecoolShop.Controllers
             return View("Payment");
         }
 
+        public void OnPost(Order order)
+        {
+            Order currentOrder = order;
+            string firstName = currentOrder.FirstName;
+            string lastName = currentOrder.LastName;
+            string clientEmail = currentOrder.ClientEmail;
+            string clientAddress = currentOrder.ClientAddress;
+            string phoneNumber = currentOrder.PhoneNumber;
+            string country = currentOrder.Country;
+            string city = currentOrder.City;
+            string zipCode = currentOrder.ZipCode;           
+            
+            dataManager.CreateOrder(1, firstName, lastName, clientEmail,
+                clientAddress, phoneNumber, country, city, zipCode);
+            Response.Redirect("Payment");
+        }
+
         [Route("api/get-categories")]
         public string GetCategories()
         {
@@ -82,36 +99,60 @@ namespace Codecool.CodecoolShop.Controllers
         [Route("api/get-cart-products")]
         public string GetCartProducts()
         {
+            // TODO
+            // and related FK
+            // change database user.Id if you used automted Identity to PK, nvarchar(450) not null
+            // and GetProductsInCart(string userId)
             return JsonSerializer.Serialize(dataManager.GetProductsInCart(1));
         }
 
         [Route("cart/add/{productId}")]
         public void AddToCart(int productId)
         {
+            // TODO
+            // change database user.Id if you used automted Identity to PK, nvarchar(450) not null
+            // and related FK
+            // and AddProductToCart(productId, string userId)
             dataManager.AddProductToCart(productId, 1);
         }
 
         [Route("cart/increase/{productId}")]
         public void IncreaseProductQuantityInCart(int productId)
         {
+            // TODO
+            // change database user.Id if you used automted Identity to PK, nvarchar(450) not null
+            // and related FK
+            // and IncreaseProductQuantity(productId, string userId)
             dataManager.IncreaseProductQuantity(productId, 1);
         }
 
         [Route("cart/remove/{productId}")]
         public void RemoveFromCart(int productId)
         {
+            // TODO
+            // change database user.Id if you used automted Identity to PK, nvarchar(450) not null
+            // and related FK
+            // and RemoveProductFromCart(productId, string userId)
             dataManager.RemoveProductFromCart(productId, 1);
         }
 
         [Route("cart/delete/{productId}")]
         public void DeleteFromCart(int productId)
         {
+            // TODO
+            // change database user.Id if you used automted Identity to PK, nvarchar(450) not null
+            // and related FK
+            // and DeleteProductFromCart(productId, string userId)
             dataManager.DeleteProductFromCart(productId, 1);
         }
 
         [Route("cart/clear")]
         public void ClearCart()
         {
+            // TODO
+            // change database user.Id if you used automted Identity to PK, nvarchar(450) not null
+            // and related FK
+            // and ClearCart(string userId)
             dataManager.ClearCart(1);
         }
 
