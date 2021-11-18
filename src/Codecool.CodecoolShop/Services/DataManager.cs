@@ -157,8 +157,10 @@ namespace Codecool.CodecoolShop.Services
             return productList;
         }
 
-        public List<Product> GetProductsInCart(int cartId)
+        public List<Product> GetProductsInCart(int userId)
         {
+            int cartId = GetCartId(userId);
+
             List<Product> productList = new List<Product>() { };
             SqlConnection connection = new SqlConnection(ConnectionString);
             string sqlQuery = @"SELECT p.id, p.name, p.defaultprice, p.description, p.currency,
@@ -210,8 +212,10 @@ namespace Codecool.CodecoolShop.Services
             return productList;
         }
 
-        public void AddProductToCart(int productId, int cartId)
+        public void AddProductToCart(int productId, int userId)
         {
+            int cartId = GetCartId(userId);
+
             SqlConnection connection = new SqlConnection(ConnectionString);
             string sqlQueryCheck = @"SELECT cart_id, product_id, quantity FROM cart_product WHERE cart_id = @cartId AND product_id = @productId";
             SqlCommand command1 = new SqlCommand(sqlQueryCheck, connection);
@@ -244,8 +248,10 @@ namespace Codecool.CodecoolShop.Services
             }
         }
 
-        public void IncreaseProductQuantity(int productId, int cartId)
+        public void IncreaseProductQuantity(int productId, int userId)
         {
+            int cartId = GetCartId(userId);
+
             SqlConnection connection = new SqlConnection(ConnectionString);
             string sqlQuery = @"UPDATE cart_product SET quantity = quantity + 1 WHERE cart_id = @cartId AND product_id = @productId";
             SqlCommand command = new SqlCommand(sqlQuery, connection);
@@ -256,8 +262,10 @@ namespace Codecool.CodecoolShop.Services
             connection.Close();
         }
 
-        public void RemoveProductFromCart(int productId, int cartId)
+        public void RemoveProductFromCart(int productId, int userId)
         {
+            int cartId = GetCartId(userId);
+
             SqlConnection connection = new SqlConnection(ConnectionString);
             string sqlQuery = @"UPDATE cart_product SET quantity = quantity - 1 WHERE cart_id = @cartId AND product_id = @productId";
             SqlCommand command1 = new SqlCommand(sqlQuery, connection);
@@ -289,8 +297,10 @@ namespace Codecool.CodecoolShop.Services
             }
         }
 
-        public void DeleteProductFromCart(int productId, int cartId)
+        public void DeleteProductFromCart(int productId, int userId)
         {
+            int cartId = GetCartId(userId);
+
             SqlConnection connection = new SqlConnection(ConnectionString);
             string sqlQuery = @"DELETE FROM cart_product WHERE @productId = product_id AND @cartId = cart_id";
             SqlCommand command = new SqlCommand(sqlQuery, connection);
@@ -301,8 +311,10 @@ namespace Codecool.CodecoolShop.Services
             connection.Close();
         }
 
-        public void ClearCart(int cartId)
+        public void ClearCart(int userId)
         {
+            int cartId = GetCartId(userId);
+
             SqlConnection connection = new SqlConnection(ConnectionString);
             string sqlQuery = @"DELETE FROM cart_product WHERE @cartId = cart_id";
             SqlCommand command = new SqlCommand(sqlQuery, connection);
@@ -365,5 +377,114 @@ namespace Codecool.CodecoolShop.Services
             connection.Close();
             return suppliers;
         }
+
+        public int GetCartId(int userId)
+        {
+            List<int> usersIdList = new List<int>() { };
+            SqlConnection connection = new SqlConnection(ConnectionString);
+            string sqlQueryUserIdCheck = @"SELECT cart.id FROM cart WHERE cart.account_id = @userId;";
+            SqlCommand commandUserId = new SqlCommand(sqlQueryUserIdCheck, connection);
+            commandUserId.Parameters.AddWithValue("@userId", userId);
+            connection.Open();
+            SqlDataReader sqlDataReaderUserId = commandUserId.ExecuteReader();
+            if (sqlDataReaderUserId.HasRows)
+            {
+                while (sqlDataReaderUserId.Read())
+                {
+                    usersIdList.Add((int)sqlDataReaderUserId["id"]);
+                }
+            }
+            connection.Close();
+            int cartId = usersIdList[0];
+            return cartId;
+        }
+
+        public int GetOrderId(int userId)
+        {
+            List<int> orderIdList = new List<int>() { };
+            SqlConnection connection = new SqlConnection(ConnectionString);
+            string sqlQueryOrderIdCheck = @"SELECT id FROM client_order WHERE account_id = @userId;";
+            SqlCommand commandUserId = new SqlCommand(sqlQueryOrderIdCheck, connection);
+            commandUserId.Parameters.AddWithValue("@userId", userId);
+            connection.Open();
+            SqlDataReader sqlDataReaderUserId = commandUserId.ExecuteReader();
+            if (sqlDataReaderUserId.HasRows)
+            {
+                while (sqlDataReaderUserId.Read())
+                {
+                    orderIdList.Add((int)sqlDataReaderUserId["id"]);
+                }
+            }
+            connection.Close();
+            int orderId = orderIdList[0];
+            return orderId;
+        }
+
+        public void CreateOrder(int userId, string firstName, string lastName, 
+            string email, string address, string phoneNumber, string country, string city, string zipCode)
+        {
+            SqlConnection connection = new SqlConnection(ConnectionString);
+            string sqlQueryInsertClienOrder = @"INSERT INTO client_order(account_id, order_status, first_name, last_name, client_email, client_address, phone_number, country, city, zip_code, order_date) 
+                                                VALUES (@account_id, @order_status, @first_name, @last_name, @client_email, @client_address, @phone_number, @country, @city, @zip_code, @order_date)";
+            SqlCommand command1 = new SqlCommand(sqlQueryInsertClienOrder, connection);
+            string orderStatus = "checked";
+            command1.Parameters.AddWithValue("@account_id", userId);
+            command1.Parameters.AddWithValue("@order_status", orderStatus);
+            command1.Parameters.AddWithValue("@first_name", firstName);
+            command1.Parameters.AddWithValue("@last_name", lastName);
+            command1.Parameters.AddWithValue("@client_email", email);
+            command1.Parameters.AddWithValue("@client_address", address);
+            command1.Parameters.AddWithValue("@phone_number", phoneNumber);
+            command1.Parameters.AddWithValue("@country", country);
+            command1.Parameters.AddWithValue("@city", city);
+            command1.Parameters.AddWithValue("@zip_code", zipCode);
+            command1.Parameters.AddWithValue("@order_date", DateTime.Now);
+            connection.Open();
+            command1.ExecuteNonQuery();
+            connection.Close();
+
+            List<Dictionary<string, dynamic>> productsList = new List<Dictionary<string, dynamic>>();
+            int cartId = GetCartId(userId);
+            string sqlQuerySelect = @"SELECT product_id, quantity FROM cart_product WHERE cart_id = @cartId";
+            SqlCommand command2 = new SqlCommand(sqlQuerySelect, connection);
+            command2.Parameters.AddWithValue("@cartId", cartId);
+            connection.Open();
+            SqlDataReader sqlDataReader = command2.ExecuteReader();
+            if (sqlDataReader.HasRows)
+            {
+                while (sqlDataReader.Read())
+                {
+                    int currentProductId = (int)sqlDataReader["product_id"];
+                    int currentQuantity = (int)sqlDataReader["quantity"];
+                    Dictionary<string, dynamic> productDict = new Dictionary<string, dynamic>();
+                    productDict.Add("ProductId", currentProductId);
+                    productDict.Add("Quantity", currentQuantity);
+                    productsList.Add(productDict);
+                }
+            }
+            connection.Close();
+
+            int clientOrderId = GetOrderId(userId);
+            foreach (var dict in productsList)
+            {
+                int productId = dict["ProductId"];
+                int quantity = dict["Quantity"];
+                string sqlQueryInsertOrderProduct = @"INSERT INTO order_product(client_order_id, product_id, quantity) 
+                                                    VALUES (@client_order_id, @product_id, @quantity)";
+                SqlCommand command3 = new SqlCommand(sqlQueryInsertOrderProduct, connection);
+                command3.Parameters.AddWithValue("@client_order_id", clientOrderId);
+                command3.Parameters.AddWithValue("@product_id", productId);
+                command3.Parameters.AddWithValue("@quantity", quantity);
+                connection.Open();
+                command3.ExecuteNonQuery();
+                connection.Close();
+            }
+            
+            ClearCart(userId);
+        }
+
+
+
+
     }
 }
