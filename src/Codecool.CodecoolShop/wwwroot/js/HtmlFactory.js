@@ -54,7 +54,9 @@
                     }.jpg" style="height: 50%; width: 50%; align-self: center; padding-top: 10px">
                     <div class="card-body">
                         <h5 class="card-title">${product.Name}</h5>
-                        <p class="card-text card-description">${product.Description}.</p>
+                        <p class="card-text card-description">${
+                          product.Description
+                        }.</p>
                         <p class="card-text">Category: ${
                           product.ProductCategory.Department
                         }</p>
@@ -65,8 +67,9 @@
                           product.DefaultPrice
                         ).toFixed(2)}</strong></p>
                             <span type="button" class="btn btn-warning add-cart-btn text-center" data-product="dataProduct-${
-        product.Id
-        }" id="product${product.Id
+                              product.Id
+                            }" id="product${
+      product.Id
     }" style="font-weight: bold; width: 100%;">Add To Cart</span>
                     </div>
                 </div>

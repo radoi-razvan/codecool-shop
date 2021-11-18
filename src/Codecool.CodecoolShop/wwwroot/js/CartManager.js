@@ -3,24 +3,24 @@ import { domManager } from "./DomManager.js";
 import { htmlFactory } from "./HtmlFactory.js";
 
 export let cartManager = {
-loadCart: async function () {
+  loadCart: async function () {
     const cShop = document.getElementById("cShop");
     const currentPath = cShop.dataset.path;
     if (currentPath == "/") {
-        domManager.removeChildren("#cart-container");
-        const products = await dataHandler.getCartProducts();
-        let productsSum = 0;
-        for (let product of products) {
-            productsSum +=
-                parseFloat(product.DefaultPrice).toFixed(2) *
-                product.CartProduct.Quantity;
-            const productCard = htmlFactory.cartItemBuilder(product);
-            domManager.addChild("#cart-container", productCard);
-        }
-        const sumCard = htmlFactory.cartTotalBuilder(productsSum);
-        domManager.addChild("#cart-container", sumCard);
-        addEventsToCartItems();
-        displayCartCount(products);
+      domManager.removeChildren("#cart-container");
+      const products = await dataHandler.getCartProducts();
+      let productsSum = 0;
+      for (let product of products) {
+        productsSum +=
+          parseFloat(product.DefaultPrice).toFixed(2) *
+          product.CartProduct.Quantity;
+        const productCard = htmlFactory.cartItemBuilder(product);
+        domManager.addChild("#cart-container", productCard);
+      }
+      const sumCard = htmlFactory.cartTotalBuilder(productsSum);
+      domManager.addChild("#cart-container", sumCard);
+      addEventsToCartItems();
+      displayCartCount(products);
     }
   },
 
@@ -47,7 +47,7 @@ loadCart: async function () {
   clearCart: async function () {
     await dataHandler.clearCart();
     this.loadCart();
-    },
+  },
 
   addClearCartEvent: function () {
     const cartClearBtn = document.getElementById("cart-clear");
@@ -76,9 +76,9 @@ function addEventsToCartItems() {
 
   for (let iBtn of increaseBtns) {
     iBtn.addEventListener("click", (event) => {
-        event.preventDefault();
-        const currentEvent = event.target;
-        cartManager.increaseProduct(currentEvent.dataset.increase.split("-")[1]);
+      event.preventDefault();
+      const currentEvent = event.target;
+      cartManager.increaseProduct(currentEvent.dataset.increase.split("-")[1]);
     });
   }
 
@@ -92,9 +92,9 @@ function addEventsToCartItems() {
 
   for (let deBtn of deleteBtns) {
     deBtn.addEventListener("click", (event) => {
-        event.preventDefault();
-        const currentEvent = event.target;
-        cartManager.deleteProduct(currentEvent.dataset.delete.split("-")[1]);
+      event.preventDefault();
+      const currentEvent = event.target;
+      cartManager.deleteProduct(currentEvent.dataset.delete.split("-")[1]);
     });
   }
 }
