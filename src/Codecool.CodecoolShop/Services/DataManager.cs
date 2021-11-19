@@ -483,7 +483,159 @@ namespace Codecool.CodecoolShop.Services
             ClearCart(userId);
         }
 
+        public List<Order> GetOrders(int userId)
+        {
+            List<Order> orders = GetOrdersDetails(userId);
+            foreach (var order in orders)
+            {
+                order.OrderProducts = GetOrderProducts(order.Id);
+                foreach (var orderProduct in order.OrderProducts)
+                {
+                    orderProduct.Product = GetProductsById(orderProduct.ProductId);
+                }
+            }
+            return orders;
+        }
 
+        public List<Order> GetOrdersDetails(int userId)
+        {
+            List<Order> orders = new List<Order>() { };
+            SqlConnection connection = new SqlConnection(ConnectionString);
+            string sqlQuery = @"SELECT c_o.id, c_o.order_date, c_o.order_status
+                                FROM client_order c_o
+                                WHERE account_id = @userId";
+            SqlCommand command = new SqlCommand(sqlQuery, connection);
+            command.Parameters.AddWithValue("@userId", userId);
+            connection.Open();
+            SqlDataReader sqlDataReader = command.ExecuteReader();
+            if (sqlDataReader.HasRows)
+            {
+                while (sqlDataReader.Read())
+                {
+                    var newOrder = new Order();
+
+                    newOrder.Id = (int)sqlDataReader["id"];
+                    newOrder.OrderDate = (DateTime)sqlDataReader["order_date"];
+                    newOrder.OrderStatus = (string)sqlDataReader["order_status"];
+
+                    orders.Add(newOrder);
+                }
+            }
+
+            connection.Close();
+            return orders;
+        }
+
+        public List<OrderProduct> GetOrderProducts(int clientOrderId)
+        {
+            List<OrderProduct> orderProducts = new List<OrderProduct>() { };
+            SqlConnection connection = new SqlConnection(ConnectionString);
+            string sqlQuery = @"SELECT product_id, quantity 
+                                FROM  order_product
+                                WHERE client_order_id = @clientOrderId;";
+            SqlCommand command = new SqlCommand(sqlQuery, connection);
+            command.Parameters.AddWithValue("@clientOrderId", clientOrderId);
+            connection.Open();
+            SqlDataReader sqlDataReader = command.ExecuteReader();
+            if (sqlDataReader.HasRows)
+            {
+                while (sqlDataReader.Read())
+                {
+                    var newOrderProduct = new OrderProduct();
+
+                    newOrderProduct.ProductId = (int)sqlDataReader["product_id"];
+                    newOrderProduct.Quantity = (int)sqlDataReader["quantity"];
+
+                    orderProducts.Add(newOrderProduct);
+                }
+            }
+
+            connection.Close();
+            return orderProducts;
+        }
+
+        public Product GetProductsById(int productId)
+        {
+            Product product = new Product() { };
+            SqlConnection connection = new SqlConnection(ConnectionString);
+            string sqlQuery = @"SELECT name, defaultprice
+                                FROM product
+                                WHERE id = @productId;";
+            SqlCommand command = new SqlCommand(sqlQuery, connection);
+            command.Parameters.AddWithValue("@productId", productId);
+            connection.Open();
+            SqlDataReader sqlDataReader = command.ExecuteReader();
+            if (sqlDataReader.HasRows)
+            {
+                while (sqlDataReader.Read())
+                {
+                    var newProduct = new Product();
+
+                    newProduct.Name = (string)sqlDataReader["name"];
+                    newProduct.DefaultPrice = (decimal)sqlDataReader["defaultprice"];
+
+                    product = newProduct;
+                }
+            }
+
+            connection.Close();
+            return product;
+        }
+
+        public Order GetClientOrderDetails(int userId)
+        {
+            List<Order> ordersList = new List<Order>() { };
+            SqlConnection connection = new SqlConnection(ConnectionString);
+            string sqlQuery = @"SELECT first_name, last_name, client_email, client_address, phone_number,
+                                country, city, zip_code
+                                FROM client_order
+                                WHERE account_id = @userId
+                                ORDER BY order_date DESC
+                                LIMIT 1;";
+            SqlCommand command = new SqlCommand(sqlQuery, connection);
+            command.Parameters.AddWithValue("@userId", userId);
+            connection.Open();
+            SqlDataReader sqlDataReader = command.ExecuteReader();
+            if (sqlDataReader.HasRows)
+            {
+                while (sqlDataReader.Read())
+                {
+                    var newOrder = new Order();
+
+                    newOrder.FirstName = (string)sqlDataReader["first_name"];
+                    newOrder.LastName = (string)sqlDataReader["last_name"];
+                    newOrder.ClientEmail = (string)sqlDataReader["client_email"];
+                    newOrder.ClientAddress = (string)sqlDataReader["client_address"];
+                    newOrder.PhoneNumber = (string)sqlDataReader["phone_number"];
+                    newOrder.Country = (string)sqlDataReader["country"];
+                    newOrder.City = (string)sqlDataReader["city"];
+                    newOrder.ZipCode = (string)sqlDataReader["zip_code"];
+
+                    ordersList.Add(newOrder);
+                }
+            }
+
+            connection.Close();
+            var order = ordersList[0];
+
+            return order;
+        }
+
+        public decimal GetOrderTotalByOrderId(int orderId)
+        {
+            decimal total = 0;
+            Order newOrder = new Order();
+            newOrder.OrderProducts = GetOrderProducts(orderId);
+            foreach (var orderProduct in newOrder.OrderProducts)
+            {
+                orderProduct.Product = GetProductsById(orderProduct.ProductId);
+            }
+            foreach (var orderProduct in newOrder.OrderProducts)
+            {
+                total += orderProduct.Quantity * orderProduct.Product.DefaultPrice;
+            }
+            return total;
+        }
 
 
     }

@@ -55,6 +55,12 @@ namespace Codecool.CodecoolShop.Controllers
             return View("Payment");
         }
 
+        public IActionResult Order()
+        {   
+            var orders = dataManager.GetOrders(1);
+            return View("Order", orders);
+        }
+
         public void OnPost(Order order)
         {
             Order currentOrder = order;
