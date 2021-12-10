@@ -503,7 +503,8 @@ namespace Codecool.CodecoolShop.Services
             SqlConnection connection = new SqlConnection(ConnectionString);
             string sqlQuery = @"SELECT c_o.id, c_o.order_date, c_o.order_status
                                 FROM client_order c_o
-                                WHERE account_id = @userId";
+                                WHERE account_id = @userId
+                                ORDER BY c_o.order_date DESC";
             SqlCommand command = new SqlCommand(sqlQuery, connection);
             command.Parameters.AddWithValue("@userId", userId);
             connection.Open();

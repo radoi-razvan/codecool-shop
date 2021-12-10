@@ -52,6 +52,8 @@ namespace Codecool.CodecoolShop.Controllers
 
         public IActionResult Payment()
         {
+            // TODO payment logic and links, stripe for Payment and SendGrid for email sending
+            // identity user db + check if logged in and get his id
             return View("Payment");
         }
 

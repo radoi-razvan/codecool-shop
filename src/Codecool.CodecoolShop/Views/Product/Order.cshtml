@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-        <h1 class="text-center" >Order History</h1>
+        <h1 class="text-center" >Orders History</h1>
         <div class="container">
 
             @foreach (var element in Model)
@@ -13,7 +13,7 @@
                 <div class="col-lg-3 col-lg-3 card-container" style="min-width: 425px;max-width: 425px;">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title text-center">Order @element.Id</h5>
+                            <h5 class="card-title text-center">Order</h5>
                             <p class="card-text">
                                 Date: @element.OrderDate
                             </p>
@@ -24,26 +24,26 @@
                             @foreach (var orderProduct in element.OrderProducts)
                             {
                                 total += orderProduct.Quantity * orderProduct.Product.DefaultPrice;
-                        <div class="Cart-Items-cart">
-                            <div class="image-box-cart" style="margin-right: 10px;">
-                                <img src="https://localhost:44368/img/@(orderProduct.Product.Name).jpg" class="cart-img" />
-                            </div>
-                            <div class="about-cart centered">
-                                <h1 class="title-cart text-md-center">@orderProduct.Product.Name</h1>
-                            </div>
-                            <div class="counter-cart">
-                                <div class="count-cart">
-                                    x@(orderProduct.Quantity)
+                                <div class="Cart-Items-cart">
+                                    <div class="image-box-cart" style="margin-right: 10px;">
+                                        <img src="https://localhost:44368/img/@(orderProduct.Product.Name).jpg" class="cart-img" />
+                                    </div>
+                                    <div class="about-cart centered">
+                                        <h1 class="title-cart text-md-center">@orderProduct.Product.Name</h1>
+                                    </div>
+                                    <div class="counter-cart">
+                                        <div class="count-cart">
+                                            x@(orderProduct.Quantity)
+                                        </div>
+                                    </div>
+                                    <div class="prices-cart">
+                                        <div class="amount-cart">
+                                            @orderProduct.Product.DefaultPrice.ToString("C2")
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="prices-cart">
-                                <div class="amount-cart">
-                                    @orderProduct.Product.DefaultPrice.ToString("C2")
-                                </div>
-                            </div>
-                        </div>
-                        <hr class="bg-dark" />
-                    }
+                                <hr class="bg-dark" />
+                            }
 
                             <div class="checkout-cart">
                                 <div class="total-cart">
@@ -64,3 +64,4 @@
                     </div>
                 </div>
             }
+        </div>
