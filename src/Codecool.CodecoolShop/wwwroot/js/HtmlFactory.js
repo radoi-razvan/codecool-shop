@@ -2,7 +2,7 @@
   cartItemBuilder: function (product) {
     return `<div id="cartitem${product.Id}" class="Cart-Items-cart">
                 <div class="image-box-cart">
-                    <img src="https://localhost:44368/img/${
+                    <img src="https://localhost:${location.port}/img/${
                       product.Name
                     }.jpg" class="cart-img" />
                 </div>
@@ -49,7 +49,7 @@
   cardBuilder: function (product) {
     return `<div class="col-lg-3 col-lg-3 card-container" style="max-width: 350px;">
                 <div class="card">
-                    <img src="https://localhost:44368/img/${
+                    <img src="https://localhost:${location.port}/img/${
                       product.Name
                     }.jpg" style="height: 50%; width: 50%; align-self: center; padding-top: 10px">
                     <div class="card-body">
