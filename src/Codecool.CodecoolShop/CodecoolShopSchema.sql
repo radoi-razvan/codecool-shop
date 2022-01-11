@@ -1,12 +1,12 @@
-DROP TABLE IF EXISTS cart_product;
-DROP TABLE IF EXISTS cartproduct;
-DROP TABLE IF EXISTS order_product;
-DROP TABLE IF EXISTS product;
-DROP TABLE IF EXISTS supplier;
-DROP TABLE IF EXISTS category;
-DROP TABLE IF EXISTS cart;
-DROP TABLE IF EXISTS client_order;
-DROP TABLE IF EXISTS account;
+--DROP TABLE IF EXISTS cart_product;
+--DROP TABLE IF EXISTS cartproduct;
+--DROP TABLE IF EXISTS order_product;
+--DROP TABLE IF EXISTS product;
+--DROP TABLE IF EXISTS supplier;
+--DROP TABLE IF EXISTS category;
+--DROP TABLE IF EXISTS cart;
+--DROP TABLE IF EXISTS client_order;
+--DROP TABLE IF EXISTS account;
 
 
 CREATE TABLE supplier (
@@ -34,17 +34,17 @@ CREATE TABLE product (
 	FOREIGN KEY (category_id) REFERENCES category(id),
 );
 
-CREATE TABLE account (
-	id int IDENTITY(1,1) PRIMARY KEY,
-	username VARCHAR(18) NOT NULL,
-	email VARCHAR(100) NOT NULL,
-	password NVARCHAR(100) NOT NULL,
-);
+--CREATE TABLE account (
+--	id int IDENTITY(1,1) PRIMARY KEY,
+--	username VARCHAR(18) NOT NULL,
+--	email VARCHAR(100) NOT NULL,
+--	password NVARCHAR(100) NOT NULL,
+--);
 
 CREATE TABLE cart (
 	id int IDENTITY(1,1) PRIMARY KEY,
-	account_id int,
-	FOREIGN KEY (account_id) REFERENCES account(id),
+	account_id nvarchar(450),
+	FOREIGN KEY (account_id) REFERENCES AspNetUsers(Id),
 );
 
 CREATE TABLE cart_product (
@@ -57,8 +57,8 @@ CREATE TABLE cart_product (
 
 CREATE TABLE client_order (
 	id int IDENTITY(1,1) PRIMARY KEY,
-	account_id int,
-	FOREIGN KEY (account_id) REFERENCES account(id),
+	account_id nvarchar(450),
+	FOREIGN KEY (account_id) REFERENCES AspNetUsers(id),
 	order_status VARCHAR(100) NOT NULL,
 	first_name VARCHAR(100) NOT NULL,
 	last_name VARCHAR(100) NOT NULL,
@@ -153,5 +153,5 @@ INSERT INTO supplier (name, description) VALUES
 	(SELECT id FROM category WHERE name = 'Stove'), (SELECT id FROM supplier WHERE name = 'Primer'))
 	;
 
-INSERT INTO account(username, email, password) VALUES ('Bob', 'bob_doe@gmail.com', 'bob_password');
-INSERT INTO cart(account_id) VALUES (1);
+--INSERT INTO account(username, email, password) VALUES ('Bob', 'bob_doe@gmail.com', 'bob_password');
+--INSERT INTO cart(account_id) VALUES (1);
