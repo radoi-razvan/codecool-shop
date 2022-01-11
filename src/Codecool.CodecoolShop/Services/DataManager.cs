@@ -157,8 +157,9 @@ namespace Codecool.CodecoolShop.Services
             return productList;
         }
 
-        public List<Product> GetProductsInCart(int userId)
+        public List<Product> GetProductsInCart(string userId)
         {
+            RegisterUserCart(userId);
             int cartId = GetCartId(userId);
 
             List<Product> productList = new List<Product>() { };
@@ -212,8 +213,9 @@ namespace Codecool.CodecoolShop.Services
             return productList;
         }
 
-        public void AddProductToCart(int productId, int userId)
+        public void AddProductToCart(int productId, string userId)
         {
+            RegisterUserCart(userId);
             int cartId = GetCartId(userId);
 
             SqlConnection connection = new SqlConnection(ConnectionString);
@@ -248,7 +250,7 @@ namespace Codecool.CodecoolShop.Services
             }
         }
 
-        public void IncreaseProductQuantity(int productId, int userId)
+        public void IncreaseProductQuantity(int productId, string userId)
         {
             int cartId = GetCartId(userId);
 
@@ -262,7 +264,7 @@ namespace Codecool.CodecoolShop.Services
             connection.Close();
         }
 
-        public void RemoveProductFromCart(int productId, int userId)
+        public void RemoveProductFromCart(int productId, string userId)
         {
             int cartId = GetCartId(userId);
 
@@ -293,11 +295,11 @@ namespace Codecool.CodecoolShop.Services
 
             if(currentQuantity <= 0)
             {
-                DeleteProductFromCart(productId, cartId);
+                DeleteProductFromCart(productId, userId);
             }
         }
 
-        public void DeleteProductFromCart(int productId, int userId)
+        public void DeleteProductFromCart(int productId, string userId)
         {
             int cartId = GetCartId(userId);
 
@@ -311,7 +313,7 @@ namespace Codecool.CodecoolShop.Services
             connection.Close();
         }
 
-        public void ClearCart(int userId)
+        public void ClearCart(string userId)
         {
             int cartId = GetCartId(userId);
 
@@ -378,7 +380,7 @@ namespace Codecool.CodecoolShop.Services
             return suppliers;
         }
 
-        public int GetCartId(int userId)
+        public int GetCartId(string userId)
         {
             List<int> usersIdList = new List<int>() { };
             SqlConnection connection = new SqlConnection(ConnectionString);
@@ -399,7 +401,7 @@ namespace Codecool.CodecoolShop.Services
             return cartId;
         }
 
-        public int GetOrderId(int userId)
+        public int GetOrderId(string userId)
         {
             List<int> orderIdList = new List<int>() { };
             SqlConnection connection = new SqlConnection(ConnectionString);
@@ -420,7 +422,7 @@ namespace Codecool.CodecoolShop.Services
             return orderId;
         }
 
-        public void CreateOrder(int userId, string firstName, string lastName, 
+        public void CreateOrder(string userId, string firstName, string lastName, 
             string email, string address, string phoneNumber, string country, string city, string zipCode)
         {
             SqlConnection connection = new SqlConnection(ConnectionString);
@@ -483,7 +485,7 @@ namespace Codecool.CodecoolShop.Services
             ClearCart(userId);
         }
 
-        public List<Order> GetOrders(int userId)
+        public List<Order> GetOrders(string userId)
         {
             List<Order> orders = GetOrdersDetails(userId);
             foreach (var order in orders)
@@ -497,7 +499,7 @@ namespace Codecool.CodecoolShop.Services
             return orders;
         }
 
-        public List<Order> GetOrdersDetails(int userId)
+        public List<Order> GetOrdersDetails(string userId)
         {
             List<Order> orders = new List<Order>() { };
             SqlConnection connection = new SqlConnection(ConnectionString);
@@ -583,7 +585,7 @@ namespace Codecool.CodecoolShop.Services
             return product;
         }
 
-        public Order GetClientOrderDetails(int userId)
+        public Order GetClientOrderDetails(string userId)
         {
             List<Order> ordersList = new List<Order>() { };
             SqlConnection connection = new SqlConnection(ConnectionString);
@@ -638,6 +640,43 @@ namespace Codecool.CodecoolShop.Services
             return total;
         }
 
+        public void RegisterUserCart(string userId)
+        {
+            if(!UserHasCart(userId))
+            {
+                SqlConnection connection = new SqlConnection(ConnectionString);
+                string sqlQueryInsert = @"INSERT INTO cart(account_id) VALUES (@userId)";
+                SqlCommand command = new SqlCommand(sqlQueryInsert, connection);
+                command.Parameters.AddWithValue("@userId", userId);
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+        }
+
+        public bool UserHasCart(string userId)
+        {
+            List<string> cartAccountsIdsList = new List<string>() { };
+            SqlConnection connection = new SqlConnection(ConnectionString);
+            string sqlQuery = @"SELECT account_id
+                                FROM cart;";
+            SqlCommand command = new SqlCommand(sqlQuery, connection);
+            connection.Open();
+            SqlDataReader sqlDataReader = command.ExecuteReader();
+            if (sqlDataReader.HasRows)
+            {
+                while (sqlDataReader.Read())
+                {
+                    string accountId = (string)sqlDataReader["account_id"];
+
+                    cartAccountsIdsList.Add(accountId);
+                }
+            }
+
+            connection.Close();
+
+            return cartAccountsIdsList.Contains(userId);
+        }
 
     }
 }
