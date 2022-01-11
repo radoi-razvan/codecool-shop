@@ -10,6 +10,9 @@ using Microsoft.AspNetCore.Http;
 using Codecool.CodecoolShop.Utils;
 using System.Text.Json;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Identity;
 
 namespace Codecool.CodecoolShop.Controllers
 {
@@ -18,10 +21,11 @@ namespace Codecool.CodecoolShop.Controllers
         private readonly ILogger<ProductController> _logger;
         private readonly IConfiguration configuration;
         private DataManager dataManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
         public ProductService ProductService { get; set; }
 
-        public ProductController(ILogger<ProductController> logger, IConfiguration config)
+        public ProductController(ILogger<ProductController> logger, IConfiguration config, UserManager<IdentityUser> userManager)
         {
             _logger = logger;
             configuration = config;
@@ -32,24 +36,30 @@ namespace Codecool.CodecoolShop.Controllers
                 ProductCategoryDaoMemory.GetInstance(),
                 SupplierDaoMemory.GetInstance(),
                 CartDaoMemory.GetInstance());
+
+            _userManager = userManager;
         }
 
+        [AllowAnonymous]
         [Route("/get-products")]
         public string GetAllProducts()
         {
             return JsonSerializer.Serialize(dataManager.GetAllProducts());
         }
 
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return View("Index");
         }
 
+        [Authorize]
         public IActionResult Checkout()
         {
             return View("Checkout");
         }
 
+        [Authorize]
         public IActionResult Payment()
         {
             // TODO payment logic and links, stripe for Payment and SendGrid for email sending
@@ -57,12 +67,15 @@ namespace Codecool.CodecoolShop.Controllers
             return View("Payment");
         }
 
+        [Authorize]
         public IActionResult Order()
-        {   
-            var orders = dataManager.GetOrders(1);
+        {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var orders = dataManager.GetOrders(userId);
             return View("Order", orders);
         }
 
+        [Authorize]
         public void OnPost(Order order)
         {
             Order currentOrder = order;
@@ -73,37 +86,43 @@ namespace Codecool.CodecoolShop.Controllers
             string phoneNumber = currentOrder.PhoneNumber;
             string country = currentOrder.Country;
             string city = currentOrder.City;
-            string zipCode = currentOrder.ZipCode;           
-            
-            dataManager.CreateOrder(1, firstName, lastName, clientEmail,
+            string zipCode = currentOrder.ZipCode;
+
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            dataManager.CreateOrder(userId, firstName, lastName, clientEmail,
                 clientAddress, phoneNumber, country, city, zipCode);
             Response.Redirect("Payment");
         }
 
+        [AllowAnonymous]
         [Route("api/get-categories")]
         public string GetCategories()
         {
             return JsonSerializer.Serialize(dataManager.GetAllCategories());
         }
 
+        [AllowAnonymous]
         [Route("api/get-suppliers")]
         public string GetSuppliers()
         {
             return JsonSerializer.Serialize(dataManager.GetAllSuppliers());
         }
 
+        [AllowAnonymous]
         [Route("/get-products/category/{categoryIndex}")]
         public string IndexByCategory(int categoryIndex)
         {
             return JsonSerializer.Serialize(dataManager.GetProductsByCategory(categoryIndex));
         }
 
+        [AllowAnonymous]
         [Route("/get-products/supplier/{supplierIndex}")]
         public string IndexBySupplier(int supplierIndex)
         {
             return JsonSerializer.Serialize(dataManager.GetProductsBySupplier(supplierIndex));
         }
 
+        [Authorize]
         [Route("api/get-cart-products")]
         public string GetCartProducts()
         {
@@ -111,9 +130,12 @@ namespace Codecool.CodecoolShop.Controllers
             // and related FK
             // change database user.Id if you used automted Identity to PK, nvarchar(450) not null
             // and GetProductsInCart(string userId)
-            return JsonSerializer.Serialize(dataManager.GetProductsInCart(1));
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            // dataManager.RegisterUserCart(userId);
+            return JsonSerializer.Serialize(dataManager.GetProductsInCart(userId));
         }
 
+        [Authorize]
         [Route("cart/add/{productId}")]
         public void AddToCart(int productId)
         {
@@ -121,9 +143,11 @@ namespace Codecool.CodecoolShop.Controllers
             // change database user.Id if you used automted Identity to PK, nvarchar(450) not null
             // and related FK
             // and AddProductToCart(productId, string userId)
-            dataManager.AddProductToCart(productId, 1);
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            dataManager.AddProductToCart(productId, userId);
         }
 
+        [Authorize]
         [Route("cart/increase/{productId}")]
         public void IncreaseProductQuantityInCart(int productId)
         {
@@ -131,9 +155,11 @@ namespace Codecool.CodecoolShop.Controllers
             // change database user.Id if you used automted Identity to PK, nvarchar(450) not null
             // and related FK
             // and IncreaseProductQuantity(productId, string userId)
-            dataManager.IncreaseProductQuantity(productId, 1);
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            dataManager.IncreaseProductQuantity(productId, userId);
         }
 
+        [Authorize]
         [Route("cart/remove/{productId}")]
         public void RemoveFromCart(int productId)
         {
@@ -141,9 +167,11 @@ namespace Codecool.CodecoolShop.Controllers
             // change database user.Id if you used automted Identity to PK, nvarchar(450) not null
             // and related FK
             // and RemoveProductFromCart(productId, string userId)
-            dataManager.RemoveProductFromCart(productId, 1);
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            dataManager.RemoveProductFromCart(productId, userId);
         }
 
+        [Authorize]
         [Route("cart/delete/{productId}")]
         public void DeleteFromCart(int productId)
         {
@@ -151,9 +179,11 @@ namespace Codecool.CodecoolShop.Controllers
             // change database user.Id if you used automted Identity to PK, nvarchar(450) not null
             // and related FK
             // and DeleteProductFromCart(productId, string userId)
-            dataManager.DeleteProductFromCart(productId, 1);
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            dataManager.DeleteProductFromCart(productId, userId);
         }
 
+        [Authorize]
         [Route("cart/clear")]
         public void ClearCart()
         {
@@ -161,7 +191,8 @@ namespace Codecool.CodecoolShop.Controllers
             // change database user.Id if you used automted Identity to PK, nvarchar(450) not null
             // and related FK
             // and ClearCart(string userId)
-            dataManager.ClearCart(1);
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            dataManager.ClearCart(userId);
         }
 
 
