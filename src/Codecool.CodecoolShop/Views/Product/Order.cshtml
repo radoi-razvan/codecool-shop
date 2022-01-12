@@ -4,6 +4,9 @@
     ViewData["Title"] = "Order";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor httpContextAccessor
+
 
         <h1 class="text-center" >Orders History</h1>
         <div class="container">
@@ -26,8 +29,8 @@
                                 total += orderProduct.Quantity * orderProduct.Product.DefaultPrice;
                                 <div class="Cart-Items-cart">
                                     <div class="image-box-cart" style="margin-right: 10px;">
-                                        <img src="https://localhost:44368/img/@(orderProduct.Product.Name).jpg" class="cart-img" />
-                                    </div>
+                                        <img src="https://localhost:@(Context.Request.HttpContext.Request.Host.Port)/img/@(orderProduct.Product.Name).jpg" class="cart-img" />
+                                    </div> 
                                     <div class="about-cart centered">
                                         <h1 class="title-cart text-md-center">@orderProduct.Product.Name</h1>
                                     </div>
