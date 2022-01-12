@@ -40,7 +40,7 @@
                     <div>
                         <div class="Subtotal-cart">Sub-Total</div>
                     </div>
-                    <div class="total-amount-cart me-3" id="cart-total-container">$${productSum}</div>
+                    <div class="total-amount-cart me-3" id="cart-total-container">$${parseFloat(productSum).toFixed(2)}</div>
                 </div>
                 <a class="btn btn-warning" style="font-weight: bold" href="/Product/Checkout">Checkout</a>
             </div>`;
@@ -65,12 +65,12 @@
                         }</p>
                         <p class="card-text text-center"><strong>Price: $${parseFloat(
                           product.DefaultPrice
-                        ).toFixed(2)}</strong></p>
-                            <span type="button" class="btn btn-warning add-cart-btn text-center" data-product="dataProduct-${
-                              product.Id
-                            }" id="product${
-      product.Id
-    }" style="font-weight: bold; width: 100%;">Add To Cart</span>
+    ).toFixed(2)}</strong></p>
+                    <span type="button" class="btn btn-warning add-cart-btn text-center" data-product="dataProduct-${product.Id
+        }" id="product${product.Id
+        }" style="font-weight: bold; width: 100%; ${document.querySelector('[href="/Identity/Account/Manage"]') === null ? `pointer-events: none;` : ``}">
+                            Add To Cart
+                        </span>
                     </div>
                 </div>
             </div>`;

@@ -9,8 +9,11 @@ import { cartManager } from "./CartManager.js";
 const init = () => {
   layoutManager.loadLayoutElements();
   productsManager.loadProducts();
-  cartManager.loadCart();
-  cartManager.addClearCartEvent();
+    if (document.querySelector('[href="/Identity/Account/Manage"]') !== null) {
+        cartManager.loadCart();
+        cartManager.addClearCartEvent();
+    }
+
 };
 
 init();
