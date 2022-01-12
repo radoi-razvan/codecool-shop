@@ -2,7 +2,7 @@
     ViewData["Title"] = "Checkout";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<div class="container card justify-content-center" style="margin-top: 20px; margin-bottom: 20px;">
+<div class="container card justify-content-center" style="margin-top: 20px; margin-bottom: 20px; max-width: 500px;">
     <div class="ps-5 pe-5 justify-content-center" style="margin-top: 20px; margin-bottom: 20px;">
         <h4 class="mb-3">Payment</h4>
 
@@ -22,7 +22,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6 mb-3">
+                <div class="mb-3">
                     <label for="cc-name">Name on card</label>
                     <input type="text" class="form-control" id="cc-name" placeholder="" required>
                     <small class="text-muted">Full name as displayed on card</small>
@@ -32,7 +32,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-6 mb-3">
+                <div class="mb-3">
                     <label for="cc-number">Credit card number</label>
                     <input type="text" class="form-control" id="cc-number" placeholder="" required>
                     <div class="invalid-feedback">
@@ -41,14 +41,14 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-md-3 mb-3">
+                <div class="mb-3">
                     <label for="cc-expiration">Expiration</label>
                     <input type="text" class="form-control" id="cc-expiration" placeholder="" required>
                     <div class="invalid-feedback">
                         Expiration date required
                     </div>
                 </div>
-                <div class="col-md-3 mb-3">
+                <div class="mb-3">
                     <label for="cc-expiration">CVV</label>
                     <input type="text" class="form-control" id="cc-cvv" placeholder="" required>
                     <div class="invalid-feedback">
