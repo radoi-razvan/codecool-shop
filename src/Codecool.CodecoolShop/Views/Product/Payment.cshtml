@@ -1,4 +1,7 @@
-﻿@{
+﻿@using Microsoft.Extensions.Options
+@inject IOptions<Codecool.CodecoolShop.Models.StripeSettings> Stripe
+
+@{
     ViewData["Title"] = "Checkout";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
@@ -6,7 +9,21 @@
     <div class="ps-5 pe-5 justify-content-center" style="margin-top: 20px; margin-bottom: 20px;">
         <h4 class="mb-3">Payment</h4>
 
-        <form class="needs-validation" novalidate>
+        <div class="text-center">
+            <form asp-action="Charge" asp-controller="ProductController" method="POST">
+                <article>
+                    <label>Amount: $5.00</label>
+                </article>
+                <script src="//checkout.stripe.com/v2/checkout.js"
+                        class="stripe-button"
+                        data-keyboard="@Stripe.Value.PublishableKey"
+                        data-locale="auto"
+                        data-description="Sample Charge">
+                </script>
+            </form>
+        </div>
+
+        @*<form class="needs-validation" novalidate>
             <div class="d-block my-3">
                 <div class="custom-control custom-radio">
                     <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked required>
@@ -57,7 +74,7 @@
                 </div>
             </div>
             <button class="btn btn-warning btn-lg btn-block" style="font-weight: bold; font-size: 15px;" type="submit">Proceed to Pay</button>
-        </form>
+        </form>*@
     </div>
 </div>
 

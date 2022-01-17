@@ -13,6 +13,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
+using Stripe;
 
 namespace Codecool.CodecoolShop.Controllers
 {
@@ -23,7 +25,7 @@ namespace Codecool.CodecoolShop.Controllers
         private DataManager dataManager;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public ProductService ProductService { get; set; }
+        public Services.ProductService ProductService { get; set; }
 
         public ProductController(ILogger<ProductController> logger, IConfiguration config, UserManager<IdentityUser> userManager)
         {
@@ -31,7 +33,7 @@ namespace Codecool.CodecoolShop.Controllers
             configuration = config;
             dataManager = new DataManager(configuration);
 
-            ProductService = new ProductService(
+            ProductService = new Services.ProductService(
                 ProductDaoMemory.GetInstance(),
                 ProductCategoryDaoMemory.GetInstance(),
                 SupplierDaoMemory.GetInstance(),
@@ -60,11 +62,54 @@ namespace Codecool.CodecoolShop.Controllers
         }
 
         [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> SendgridEmailSubmit(Emailmodel emailmodel)
+        {
+            ViewData["Message"] = "Email Sent!!!...";
+            MailConfirmationManager emailexample = new MailConfirmationManager();
+            await emailexample.Execute(emailmodel.From, emailmodel.To, emailmodel.Subject, emailmodel.Body
+                , emailmodel.Body);
+
+            return View("SendgridEmail");
+        }
+
+        [Authorize]
         public IActionResult Payment()
         {
             // TODO payment logic and links, stripe for Payment and SendGrid for email sending
             // identity user db + check if logged in and get his id
             return View("Payment");
+        }
+
+        [Authorize]
+        public IActionResult Charge(string stripeEmail, string stripeToken)
+        {
+            var customers = new CustomerService();
+            var charges = new ChargeService();
+            var customer = customers.Create(new CustomerCreateOptions { 
+                Email = stripeEmail,
+                Source = stripeToken
+            });
+            var charge = charges.Create(new ChargeCreateOptions { 
+                Amount = 500,
+                Description = "Test payment",
+                Currency = "usd",
+                Customer = customer.Id,
+                Metadata = new Dictionary<string, string> {
+                    { "OrderId", "111"},
+                    { "PostCode", "LEE111"}
+                }
+            });
+
+            string message;
+            if (charge.Status == "succeeded")
+            {
+                string BalanceTransactionId = charge.BalanceTransactionId;
+                message = "Payment Succeeded";
+                return View("PaymentResponse", message);
+            }
+            message = "Payment Failed";
+            return View("PaymentResponse", message);
         }
 
         [Authorize]
@@ -76,9 +121,9 @@ namespace Codecool.CodecoolShop.Controllers
         }
 
         [Authorize]
-        public void OnPost(Order order)
+        public void OnPost(Models.Order order)
         {
-            Order currentOrder = order;
+            Models.Order currentOrder = order;
             string firstName = currentOrder.FirstName;
             string lastName = currentOrder.LastName;
             string clientEmail = currentOrder.ClientEmail;
