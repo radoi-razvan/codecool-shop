@@ -1,5 +1,8 @@
-﻿@using Microsoft.Extensions.Options
+﻿
+@using Microsoft.Extensions.Options
+@using Codecool.CodecoolShop.Services
 @inject IOptions<Codecool.CodecoolShop.Models.StripeSettings> Stripe
+@model DataManager
 
 @{
     ViewData["Title"] = "Checkout";
@@ -10,9 +13,9 @@
         <h4 class="mb-3">Payment</h4>
 
         <div class="text-center">
-            <form asp-action="Charge" asp-controller="Product" method="POST">
+            <form asp-action="Charge" asp-controller="Product" asp-route-orderId=@ViewBag.orderId method="POST">
                 <article>
-                    <label>Amount: $5.00</label>
+                    <label>Amount: $ @Model.GetOrderTotalByOrderId(ViewBag.orderId)</label>
                 </article>
                 <script src="//checkout.stripe.com/v2/checkout.js"
                         class="stripe-button"

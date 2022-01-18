@@ -81,18 +81,18 @@ namespace Codecool.CodecoolShop.Controllers
         }
 
         [Authorize]
-        public IActionResult Payment()
+        public IActionResult Payment(int orderId)
         {
             // TODO payment logic and links, stripe for Payment and SendGrid for email sending
             // identity user db + check if logged in and get his id
-            return View("Payment");
+            ViewBag.OrderId = orderId;  
+            return View("Payment", dataManager);
         }
 
         [Authorize]
-        public IActionResult Charge(string stripeEmail, string stripeToken)
+        public IActionResult Charge(string stripeEmail, string stripeToken, int orderId)
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var order = dataManager.GetClientOrderDetails(userId);
+            var order = dataManager.GetClientOrderDetails(orderId);
             var customers = new CustomerService();
             var charges = new ChargeService();
             var customer = customers.Create(new CustomerCreateOptions { 

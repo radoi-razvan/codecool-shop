@@ -57,9 +57,7 @@
                                 </div>
                                 @if (element.OrderStatus == "checked")
                                 {
-                                    //TODO proceed to pay with datamanager
-                                    <span type="button" class="btn btn-warning add-cart-btn text-center" id="order-@(element.Id)" style="font-weight: bold; width: 100%;">Contiune to Payment</span>
-                                    @*<a class="btn btn-warning" style="font-weight: bold" href="/Product/Checkout">Checkout</a>*@
+                                    <a type="button" asp-controller=Product asp-action=Payment asp-route-orderId=@element.Id class="btn btn-warning add-cart-btn text-center" id="order-@(element.Id)" style="font-weight: bold; width: 100%;">Continue to Payment</a>
                                 }
                             </div>
 

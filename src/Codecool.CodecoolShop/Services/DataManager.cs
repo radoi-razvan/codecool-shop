@@ -584,8 +584,45 @@ namespace Codecool.CodecoolShop.Services
             connection.Close();
             return product;
         }
+        public Order GetClientOrderDetails(int orderId)
+        {
+            List<Order> ordersList = new List<Order>() { };
+            SqlConnection connection = new SqlConnection(ConnectionString);
+            string sqlQuery = @"SELECT *
+                                FROM client_order
+                                WHERE id = @orderId";
+            SqlCommand command = new SqlCommand(sqlQuery, connection);
+            command.Parameters.AddWithValue("@orderId", orderId);
+            connection.Open();
+            SqlDataReader sqlDataReader = command.ExecuteReader();
+            if (sqlDataReader.HasRows)
+            {
+                while (sqlDataReader.Read())
+                {
+                    var newOrder = new Order();
 
-        public Order GetClientOrderDetails(string userId)
+                    newOrder.Id = (int)sqlDataReader["id"];
+                    newOrder.AccountId = (string)sqlDataReader["account_id"];
+                    newOrder.FirstName = (string)sqlDataReader["first_name"];
+                    newOrder.LastName = (string)sqlDataReader["last_name"];
+                    newOrder.ClientEmail = (string)sqlDataReader["client_email"];
+                    newOrder.ClientAddress = (string)sqlDataReader["client_address"];
+                    newOrder.PhoneNumber = (string)sqlDataReader["phone_number"];
+                    newOrder.Country = (string)sqlDataReader["country"];
+                    newOrder.City = (string)sqlDataReader["city"];
+                    newOrder.ZipCode = (string)sqlDataReader["zip_code"];
+
+                    ordersList.Add(newOrder);
+                }
+            }
+
+            connection.Close();
+            var order = ordersList[0];
+
+            return order;
+        }
+
+        public Order GetClientLastOrderDetails(string userId)
         {
             List<Order> ordersList = new List<Order>() { };
             SqlConnection connection = new SqlConnection(ConnectionString);
