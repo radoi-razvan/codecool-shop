@@ -68,7 +68,6 @@ namespace Codecool.CodecoolShop.Controllers
         {
             ViewData["Message"] = "Email Sent!!!...";
             Emailmodel emailmodel = new Emailmodel();
-            //string userId = User.FindFirstValue(ClaimTypes.Email);
             emailmodel.From = "codecoolshopofficial@gmail.com";
             emailmodel.To = User.FindFirstValue(ClaimTypes.Email);
             emailmodel.Subject = "Order Confirmation";
@@ -83,8 +82,6 @@ namespace Codecool.CodecoolShop.Controllers
         [Authorize]
         public IActionResult Payment(int orderId)
         {
-            // TODO payment logic and links, stripe for Payment and SendGrid for email sending
-            // identity user db + check if logged in and get his id
             ViewBag.OrderId = orderId;  
             return View("Payment", dataManager);
         }
@@ -177,12 +174,7 @@ namespace Codecool.CodecoolShop.Controllers
         [Route("api/get-cart-products")]
         public string GetCartProducts()
         {
-            // TODO
-            // and related FK
-            // change database user.Id if you used automted Identity to PK, nvarchar(450) not null
-            // and GetProductsInCart(string userId)
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            // dataManager.RegisterUserCart(userId);
             return JsonSerializer.Serialize(dataManager.GetProductsInCart(userId));
         }
 
@@ -190,10 +182,6 @@ namespace Codecool.CodecoolShop.Controllers
         [Route("cart/add/{productId}")]
         public void AddToCart(int productId)
         {
-            // TODO
-            // change database user.Id if you used automted Identity to PK, nvarchar(450) not null
-            // and related FK
-            // and AddProductToCart(productId, string userId)
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             dataManager.AddProductToCart(productId, userId);
         }
@@ -202,10 +190,6 @@ namespace Codecool.CodecoolShop.Controllers
         [Route("cart/increase/{productId}")]
         public void IncreaseProductQuantityInCart(int productId)
         {
-            // TODO
-            // change database user.Id if you used automted Identity to PK, nvarchar(450) not null
-            // and related FK
-            // and IncreaseProductQuantity(productId, string userId)
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             dataManager.IncreaseProductQuantity(productId, userId);
         }
@@ -214,10 +198,6 @@ namespace Codecool.CodecoolShop.Controllers
         [Route("cart/remove/{productId}")]
         public void RemoveFromCart(int productId)
         {
-            // TODO
-            // change database user.Id if you used automted Identity to PK, nvarchar(450) not null
-            // and related FK
-            // and RemoveProductFromCart(productId, string userId)
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             dataManager.RemoveProductFromCart(productId, userId);
         }
@@ -226,10 +206,6 @@ namespace Codecool.CodecoolShop.Controllers
         [Route("cart/delete/{productId}")]
         public void DeleteFromCart(int productId)
         {
-            // TODO
-            // change database user.Id if you used automted Identity to PK, nvarchar(450) not null
-            // and related FK
-            // and DeleteProductFromCart(productId, string userId)
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             dataManager.DeleteProductFromCart(productId, userId);
         }
@@ -238,10 +214,6 @@ namespace Codecool.CodecoolShop.Controllers
         [Route("cart/clear")]
         public void ClearCart()
         {
-            // TODO
-            // change database user.Id if you used automted Identity to PK, nvarchar(450) not null
-            // and related FK
-            // and ClearCart(string userId)
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             dataManager.ClearCart(userId);
         }
