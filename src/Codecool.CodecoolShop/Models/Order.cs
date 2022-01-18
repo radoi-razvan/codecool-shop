@@ -10,7 +10,7 @@ namespace Codecool.CodecoolShop.Models
     public class Order
     {
         public int Id { get; set; }
-        public int AccountId { get; set; }
+        public string AccountId { get; set; }
         public string OrderStatus { get; set; }
         //[Required, MinLength(3, ErrorMessage = "First Name must contain at least 3 characters")]
         public string FirstName { get; set; }

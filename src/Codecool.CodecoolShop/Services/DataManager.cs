@@ -589,12 +589,10 @@ namespace Codecool.CodecoolShop.Services
         {
             List<Order> ordersList = new List<Order>() { };
             SqlConnection connection = new SqlConnection(ConnectionString);
-            string sqlQuery = @"SELECT first_name, last_name, client_email, client_address, phone_number,
-                                country, city, zip_code
+            string sqlQuery = @"SELECT TOP 1 *
                                 FROM client_order
                                 WHERE account_id = @userId
-                                ORDER BY order_date DESC
-                                LIMIT 1;";
+                                ORDER BY order_date DESC";
             SqlCommand command = new SqlCommand(sqlQuery, connection);
             command.Parameters.AddWithValue("@userId", userId);
             connection.Open();
@@ -605,6 +603,8 @@ namespace Codecool.CodecoolShop.Services
                 {
                     var newOrder = new Order();
 
+                    newOrder.Id = (int)sqlDataReader["id"];
+                    newOrder.AccountId = (string)sqlDataReader["account_id"];
                     newOrder.FirstName = (string)sqlDataReader["first_name"];
                     newOrder.LastName = (string)sqlDataReader["last_name"];
                     newOrder.ClientEmail = (string)sqlDataReader["client_email"];
