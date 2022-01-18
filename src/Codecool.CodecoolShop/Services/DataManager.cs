@@ -624,6 +624,18 @@ namespace Codecool.CodecoolShop.Services
             return order;
         }
 
+        public void SetOrderStatus(int orderId, string status)
+        {
+            SqlConnection connection = new SqlConnection(ConnectionString);
+            string sqlQueryUpdate = @"UPDATE client_order SET order_status = @status WHERE id = @orderId";
+            SqlCommand command2 = new SqlCommand(sqlQueryUpdate, connection);
+            command2.Parameters.AddWithValue("@status", status);
+            command2.Parameters.AddWithValue("@orderId", orderId);
+            connection.Open();
+            command2.ExecuteNonQuery();
+            connection.Close();
+        }
+
         public decimal GetOrderTotalByOrderId(int orderId)
         {
             decimal total = 0;

@@ -15,6 +15,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using Stripe;
+using System;
 
 namespace Codecool.CodecoolShop.Controllers
 {
@@ -63,14 +64,20 @@ namespace Codecool.CodecoolShop.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> SendgridEmailSubmit(Emailmodel emailmodel)
+        public async void SendgridEmailSubmit(Models.Order order)
         {
             ViewData["Message"] = "Email Sent!!!...";
+            Emailmodel emailmodel = new Emailmodel();
+            //string userId = User.FindFirstValue(ClaimTypes.Email);
+            emailmodel.From = "codecoolshopofficial@gmail.com";
+            emailmodel.To = User.FindFirstValue(ClaimTypes.Email);
+            emailmodel.Subject = "Order Confirmation";
+            emailmodel.Body = $"Greetings {User.FindFirstValue(ClaimTypes.Name)},\n" +
+                $"we are happy to announce that we received your payment for the following products:\n" +
+                $"{order.OrderProducts} \n";
             MailConfirmationManager emailexample = new MailConfirmationManager();
             await emailexample.Execute(emailmodel.From, emailmodel.To, emailmodel.Subject, emailmodel.Body
                 , emailmodel.Body);
-
-            return View("SendgridEmail");
         }
 
         [Authorize]
@@ -84,6 +91,8 @@ namespace Codecool.CodecoolShop.Controllers
         [Authorize]
         public IActionResult Charge(string stripeEmail, string stripeToken)
         {
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var order = dataManager.GetClientOrderDetails(userId);
             var customers = new CustomerService();
             var charges = new ChargeService();
             var customer = customers.Create(new CustomerCreateOptions { 
@@ -91,21 +100,18 @@ namespace Codecool.CodecoolShop.Controllers
                 Source = stripeToken
             });
             var charge = charges.Create(new ChargeCreateOptions { 
-                Amount = 500,
-                Description = "Test payment",
+                Amount = Convert.ToInt64(dataManager.GetOrderTotalByOrderId(order.Id)),
                 Currency = "usd",
                 Customer = customer.Id,
-                Metadata = new Dictionary<string, string> {
-                    { "OrderId", "111"},
-                    { "PostCode", "LEE111"}
-                }
             });
 
             string message;
             if (charge.Status == "succeeded")
             {
+                dataManager.SetOrderStatus(order.Id, "paid");
                 string BalanceTransactionId = charge.BalanceTransactionId;
                 message = "Payment Succeeded";
+                SendgridEmailSubmit(order);
                 return View("PaymentResponse", message);
             }
             message = "Payment Failed";
