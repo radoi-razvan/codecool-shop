@@ -33,6 +33,8 @@ a {
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
     color: #fff;
+    background-color: goldenrod;
+    border-color: darkgoldenrod;
 }
 
 /* Sticky footer styles
