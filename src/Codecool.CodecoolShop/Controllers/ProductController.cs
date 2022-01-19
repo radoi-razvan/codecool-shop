@@ -82,8 +82,20 @@ namespace Codecool.CodecoolShop.Controllers
         [Authorize]
         public IActionResult Payment(int orderId)
         {
-            ViewBag.OrderId = orderId;  
-            return View("Payment", dataManager);
+            ViewBag.OrderId = orderId;
+            ViewBag.OrderTotal = dataManager.GetOrderTotalByOrderId(orderId);
+            var order = dataManager.GetClientOrderDetails(orderId); 
+            return View("Payment", order);
+        }
+
+        [Authorize]
+        public IActionResult PayOrder()
+        {
+            int orderId = dataManager.GetClientLastOrderDetails(User.FindFirstValue(ClaimTypes.NameIdentifier)).Id;
+            ViewBag.OrderId = orderId;
+            ViewBag.OrderTotal = dataManager.GetOrderTotalByOrderId(orderId);
+            var order = dataManager.GetClientOrderDetails(orderId);
+            return View("Payment", order);
         }
 
         [Authorize]
@@ -139,7 +151,7 @@ namespace Codecool.CodecoolShop.Controllers
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             dataManager.CreateOrder(userId, firstName, lastName, clientEmail,
                 clientAddress, phoneNumber, country, city, zipCode);
-            Response.Redirect("Payment");
+            Response.Redirect("PayOrder");
         }
 
         [AllowAnonymous]
