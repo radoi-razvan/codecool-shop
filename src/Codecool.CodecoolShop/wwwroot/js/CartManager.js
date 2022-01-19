@@ -56,17 +56,6 @@ export let cartManager = {
       this.clearCart();
     });
   },
-
-  //  checkPath: function () {
-  //      const cartBtn = document.getElementById("cartBtn");
-  //      const currentPath = cartBtn.dataset.path;
-  //      if (currentPath !== "/") {
-  //          cartBtn.style.display = "none";
-  //      }
-  //      else {
-  //          cartBtn.style.display = "block";
-  //      }
-  //},
 };
 
 function addEventsToCartItems() {
