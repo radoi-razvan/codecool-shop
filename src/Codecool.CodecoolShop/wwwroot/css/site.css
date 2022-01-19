@@ -33,8 +33,6 @@ a {
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
     color: #fff;
-    background-color: #1b6ec2;
-    border-color: #1861ac;
 }
 
 /* Sticky footer styles
@@ -333,4 +331,13 @@ hr {
 
 .label-icons-signin {
     font-size: 25px;
+}
+
+ul.nav.nav-pills li.nav-item a.nav-link {
+    color: #ffc107;
+}
+
+ul.nav.nav-pills li.nav-item a.nav-link.active {
+    color: #fff;
+    background-color: #ffc107;
 }
