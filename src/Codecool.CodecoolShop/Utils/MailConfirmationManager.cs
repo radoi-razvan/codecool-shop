@@ -14,7 +14,6 @@ namespace Codecool.CodecoolShop.Utils
             var client = new SendGridClient(apiKey);
             var from = new EmailAddress(From);
             var to = new EmailAddress(To);
-            htmlContent = "<strong>" + htmlContent + "</strong>";
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
             var response = await client.SendEmailAsync(msg);
         }
