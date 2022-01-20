@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 using Stripe;
 using System;
+using System.Text;
 
 namespace Codecool.CodecoolShop.Controllers
 {
@@ -69,11 +70,26 @@ namespace Codecool.CodecoolShop.Controllers
             ViewData["Message"] = "Email Sent!!!...";
             Emailmodel emailmodel = new Emailmodel();
             emailmodel.From = "codecoolshopofficial@gmail.com";
-            emailmodel.To = User.FindFirstValue(ClaimTypes.Email);
+            emailmodel.To = order.ClientEmail;
             emailmodel.Subject = "Order Confirmation";
-            emailmodel.Body = $"Greetings {User.FindFirstValue(ClaimTypes.Name)},\n" +
-                $"we are happy to announce that we received your payment for the following products:\n" +
-                $"{order.OrderProducts} \n";
+
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine($"<p>Greetings {order.FirstName},</p>");
+            sb.AppendLine($"<p>We are happy to announce that we received your payment for the following products:</p>");
+            sb.AppendLine($"<ul>");
+           List <OrderProduct> orderProducts = dataManager.GetPaidOrderProducts(order);
+            foreach (var orderProduct in orderProducts)
+            {
+                sb.AppendLine($"<li><strong>{orderProduct.Product.Name}</strong> x{orderProduct.Quantity} {orderProduct.Product.DefaultPrice:C2}</li>");
+            }
+            sb.AppendLine($"</ul>");
+            sb.AppendLine($"<p>Sub-Total <strong>{dataManager.GetOrderTotalByOrderId(order.Id):C2}</strong></p>");
+            sb.AppendLine($"<p>Shipping address: {order.ClientAddress}, {order.City}, {order.ZipCode}</p>");
+            sb.AppendLine($"<p>Best regards,</p>");
+            sb.AppendLine($"<p>CodecoolShop</p>");
+            
+            emailmodel.Body = sb.ToString();
+
             MailConfirmationManager emailexample = new MailConfirmationManager();
             await emailexample.Execute(emailmodel.From, emailmodel.To, emailmodel.Subject, emailmodel.Body
                 , emailmodel.Body);
