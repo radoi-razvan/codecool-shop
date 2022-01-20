@@ -499,6 +499,16 @@ namespace Codecool.CodecoolShop.Services
             return orders;
         }
 
+        public List<OrderProduct> GetPaidOrderProducts(Order currentOrder)
+        {
+            currentOrder.OrderProducts = GetOrderProducts(currentOrder.Id);
+            foreach (var orderProduct in currentOrder.OrderProducts)
+            {
+                orderProduct.Product = GetProductsById(orderProduct.ProductId);              
+            }
+            return currentOrder.OrderProducts;
+        }
+
         public List<Order> GetOrdersDetails(string userId)
         {
             List<Order> orders = new List<Order>() { };
