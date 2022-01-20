@@ -16,7 +16,6 @@
         
             <form asp-action="Charge" asp-controller="Product" asp-route-orderId=@ViewBag.OrderId method="POST">
                 <article>
-                    @*<label> @Model. </label>*@
                     <label>Amount: $ @ViewBag.OrderTotal</label>
                 </article>
                 <script src="//checkout.stripe.com/v2/checkout.js"
