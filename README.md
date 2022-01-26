@@ -39,7 +39,7 @@ Codecool shop is an online shop where you can buy different types of products. U
 - The user can register, login, add products to his cart (clear the cart, delete items from cart, increase or decrease the quantity of the item)
 - The user can place an order, by using a credit card
 - If the payment succeeded he will get a success response and a mail with the order details
-- The user cand see his order history, paid orders but also orders that he checked out and he didn't pay, if he wants to pay them now he can
+- The user can see his order history, paid orders but also orders that he checked out and he hasn't paid yet, if he wants to pay them now he can
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
