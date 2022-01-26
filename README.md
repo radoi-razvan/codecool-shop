@@ -55,7 +55,7 @@ Codecool shop is an online shop where you can buy different types of products. U
 - Place order on the checkout page
 - Pay for items on the payment page
 - Receive an email with the order details
-- Check his orders history and pay for the orders he checked out but didn't paid yet
+- Check his orders history and pay for the orders he checked out but he hasn't paid yet
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
