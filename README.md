@@ -70,7 +70,6 @@ Front End:
 * [HTML][html]
 * [CSS][css]
 * [JavaScript][js]
-* [React.js][react]
 * [Bootstrap][bootstrap]
 
 Database Management:
@@ -198,7 +197,6 @@ Run the project with IIS Express.
 [html]: https://html.com/
 [css]: https://www.w3.org/Style/CSS/Overview.en.html
 [js]: https://www.javascript.com/
-[react]: https://reactjs.org/
 [bootstrap]: https://getbootstrap.com
 [msql-server]: https://www.microsoft.com/en-us/sql-server/sql-server-2019
 [ssms]: https://docs.microsoft.com/en-us/sql/ssms/download-sql-server-management-studio-ssms?view=sql-server-ver15
